@@ -15,9 +15,25 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+
+    // App dependencies
+    supportLibraryVersion = '25.3.1'
+    guavaVersion = '18.0'
+    espressoVersion = '2.2.2'
+    rxjavaVersion = '1.2.0'
+    rxandroidVersion = '1.2.1'
+    retrofitVersion = '2.3.0'
+    gsonVersion = '2.1.0'
+    adapterRxJavaVersion = '2.0.2'
 }

@@ -7,3 +7,8 @@
 /build
 /captures
 .externalNativeBuild
+/app/src/main/java/michael/com/tasksjavakotlin/java/util/Constants.java
+/.gitignore
+
+app/libs/
+
