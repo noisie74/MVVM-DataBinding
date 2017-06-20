@@ -46,4 +46,5 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:$rootProject.adapterRxJavaVersion"
     compile "io.reactivex:rxjava:$rootProject.rxjavaVersion"
     compile "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
+
 }
