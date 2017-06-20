@@ -55,7 +55,6 @@ public class TaskFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
 //        initView(rootView);
