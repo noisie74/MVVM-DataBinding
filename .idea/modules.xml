@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MVVM_Tasks_Java_Kotlin.iml" filepath="$PROJECT_DIR$/MVVM_Tasks_Java_Kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mvvm-tasks-java-kotlin.iml" filepath="$PROJECT_DIR$/mvvm-tasks-java-kotlin.iml" />
     </modules>
   </component>

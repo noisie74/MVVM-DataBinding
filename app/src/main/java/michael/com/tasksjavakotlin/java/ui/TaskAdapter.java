@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import michael.com.tasksjavakotlin.R;
+import michael.com.tasksjavakotlin.databinding.TaskItemBinding;
 import michael.com.tasksjavakotlin.java.model.Task;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,10 +23,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private List<Task> mTasks;
     public OnItemClickListener clickListener;
-    private TaskViewModel viewModel;
-
-
-
+    private TaskItemViewModel viewModel;
+    private TaskItemBinding binding;
 
 
     public void setOnItemClickListener(OnItemClickListener clickListener) {
@@ -58,6 +57,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             this.taskText = (TextView) view.findViewById(R.id.task_title);
             this.taskCompletedCheckBox = (CheckBox) view.findViewById(R.id.complete);
 
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -68,6 +68,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
 
         }
+
+//        @Override
+//        public void onClick(View v) {
+//            binding.complete.setChecked(true);
+//        }
     }
 
     @Override

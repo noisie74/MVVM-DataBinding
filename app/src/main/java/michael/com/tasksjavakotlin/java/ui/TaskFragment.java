@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.databinding.FragmentMainBinding;
@@ -31,6 +34,8 @@ public class TaskFragment extends Fragment {
     private TaskViewModel mViewModel;
     private Toolbar mToolbar;
     private FloatingActionButton mButtonSave;
+    RecyclerView recyclerView;
+    List<Task> list;
 
 
 
@@ -50,6 +55,7 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAdapter = new TaskAdapter(new ArrayList<Task>());
+
     }
 
     @Nullable
@@ -57,6 +63,11 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
+        list = mViewModel.getTaskList();
+        mAdapter.replaceData(list);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
 //        initView(rootView);
 //        setToolBar();
 

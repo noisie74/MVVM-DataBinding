@@ -1,6 +1,5 @@
 package michael.com.tasksjavakotlin.java.ui;
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -27,7 +26,6 @@ import rx.subscriptions.CompositeSubscription;
 
 public class TaskViewModel extends BaseObservable {
 
-    private LiveData<List<Task>> mtasks;
     private CompositeSubscription mSubscription;
     private DataManager mDataManager;
     private Context mContext;
@@ -35,6 +33,8 @@ public class TaskViewModel extends BaseObservable {
     private int progress;
     public final ObservableList<Task> items = new ObservableArrayList<>();
     public final ObservableField<String> header = new ObservableField<>();
+    public final ObservableField<String> title = new ObservableField<>();
+    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
 
 
     public TaskViewModel(Context context, DataManager dataManager) {
@@ -61,29 +61,34 @@ public class TaskViewModel extends BaseObservable {
 
         if (isLoading) {
 
-            mSubscription.add(mDataManager.getTasks()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<List<Task>>() {
-                        @Override
-                        public void onCompleted() {
-                            setProgress(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d("ViewModel", e.toString());
-                        }
-
-                        @Override
-                        public void onNext(List<Task> tasks) {
-                            items.addAll(tasks);
-                            Log.d("ViewModel", tasks.get(0).getTaskTitle());
-                        }
-                    })
-            );
+            getTaskList();
         }
+    }
 
+    public List<Task> getTaskList() {
+
+        mSubscription.add(mDataManager.getTasks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Task>>() {
+                    @Override
+                    public void onCompleted() {
+                        setProgress(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("ViewModel", e.toString());
+                    }
+
+                    @Override
+                    public void onNext(List<Task> tasks) {
+                        items.addAll(tasks);
+                        Log.d("ViewModel", tasks.get(0).getTaskTitle());
+                    }
+                })
+        );
+        return items;
     }
 
 }
