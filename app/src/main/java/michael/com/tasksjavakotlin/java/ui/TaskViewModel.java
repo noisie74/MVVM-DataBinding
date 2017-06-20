@@ -1,9 +1,6 @@
 package michael.com.tasksjavakotlin.java.ui;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -13,10 +10,10 @@ import android.databinding.ObservableList;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
+import com.android.databinding.library.baseAdapters.BR;
+
 import java.util.List;
 
-import michael.com.tasksjavakotlin.BR;
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
 import rx.Subscriber;
