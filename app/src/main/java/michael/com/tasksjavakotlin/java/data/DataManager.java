@@ -11,6 +11,7 @@ import michael.com.tasksjavakotlin.java.model.Task;
 import michael.com.tasksjavakotlin.java.network.TaskService;
 import retrofit2.Response;
 import rx.Observable;
+import rx.Single;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -43,5 +44,10 @@ public class DataManager {
                         return tasks;
                     }
                 });
+    }
+
+    public void saveTask() {
+
+
     }
 }
