@@ -4,7 +4,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -13,8 +12,6 @@ import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.databinding.TaskItemBinding;
 import michael.com.tasksjavakotlin.java.model.Task;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Created by Mikhail on 6/19/17.
  */
@@ -22,15 +19,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder> {
 
     private List<Task> mTasks;
-    public OnItemClickListener clickListener;
+    private TaskViewModel mTasksViewModel;
     private TaskItemViewModel viewModel;
-    Context context;
-
-
-    public void setOnItemClickListener(OnItemClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
+    private Context context;
+    
 
     public TaskAdapter(List<Task> tasks) {
         setList(tasks);
@@ -42,7 +34,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     }
 
     private void setList(List<Task> tasks) {
-        mTasks = checkNotNull(tasks);
+        mTasks = tasks;
 
     }
 
@@ -104,7 +96,4 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         }
     }
 
-    interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
-    }
 }

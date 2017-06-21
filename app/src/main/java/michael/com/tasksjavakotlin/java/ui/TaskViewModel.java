@@ -6,17 +6,16 @@ import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
-import android.util.Log;
-import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -35,6 +34,7 @@ public class TaskViewModel extends BaseObservable {
     public final ObservableField<String> header = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
     private final ObservableField<Task> mTaskObservable = new ObservableField<>();
+    final List<Task> cache = new ArrayList<>();
 
 
     public TaskViewModel(Context context, DataManager dataManager) {
@@ -67,28 +67,59 @@ public class TaskViewModel extends BaseObservable {
 
     public List<Task> getTaskList() {
 
+
         mSubscription.add(mDataManager.getTasks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Task>>() {
-                    @Override
-                    public void onCompleted() {
-                        setProgress(View.INVISIBLE);
-                    }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<List<Task>>() {
+            @Override
+            public void call(List<Task> tasks) {
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("ViewModel", e.toString());
-                    }
+               cache.addAll(tasks);
 
-                    @Override
-                    public void onNext(List<Task> tasks) {
-                        items.addAll(tasks);
-                        Log.d("ViewModel", tasks.get(0).getTaskTitle());
-                    }
-                })
-        );
-        return items;
-    }
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        }));
+
+//        mSubscription = new CompositeSubscription();
+
+//        mSubscription.add(mDataManager.getTasks()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<List<Task>>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        setProgress(View.INVISIBLE);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.d("ViewModel", e.toString());
+//                    }
+//
+//                    @Override
+//                    public void onNext(List<Task> tasks) {
+//
+//                        List<Task> results = tasks;
+//
+////                        items.addAll(tasks);
+//                        cache.addAll(results);
+//                        for (int i = 0; i <= 3; i++) {
+//
+//                            Log.d("ViewModel", cache.get(i).getTaskTitle());
+//                        }
+//                    }
+//
+//                })
+//        );
+//
+//        return cache;
+//
+        return cache;
+   }
 
 }

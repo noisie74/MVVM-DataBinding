@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,22 +62,23 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
-        list = mViewModel.getTaskList();
+
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
 //        initView(rootView);
 //        setToolBar();
+        list = mViewModel.getTaskList();
 
         return binding.getRoot();
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mViewModel.start();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        mViewModel.start();
+//    }
 
 //    private void initView(View view) {
 //        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
