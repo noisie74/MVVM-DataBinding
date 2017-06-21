@@ -64,7 +64,6 @@ public class TaskFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
         list = mViewModel.getTaskList();
-        mAdapter.replaceData(list);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

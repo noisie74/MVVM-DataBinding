@@ -19,4 +19,7 @@ public class TaskItemViewModel extends BaseObservable {
     }
 
 
+    public void taskClicked() {
+
+    }
 }

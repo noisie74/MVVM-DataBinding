@@ -1,11 +1,11 @@
 package michael.com.tasksjavakotlin.java.ui;
 
+import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Mikhail on 6/19/17.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder> {
 
     private List<Task> mTasks;
     public OnItemClickListener clickListener;
     private TaskItemViewModel viewModel;
-    private TaskItemBinding binding;
+    Context context;
 
 
     public void setOnItemClickListener(OnItemClickListener clickListener) {
@@ -46,65 +46,62 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
+        TaskItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context),
+                R.layout.task_item, parent, false);
 
-        private TextView taskText;
-        private CheckBox taskCompletedCheckBox;
+        return new BindingHolder(binding);
+    }
 
+    @Override
+    public void onBindViewHolder(BindingHolder holder, final int position) {
 
-        public ViewHolder(final View view) {
-            super(view);
-            this.taskText = (TextView) view.findViewById(R.id.task_title);
-            this.taskCompletedCheckBox = (CheckBox) view.findViewById(R.id.complete);
+        TaskItemBinding taskItemBinding = holder.getBinding();
+        TaskItemViewModel viewModel = taskItemBinding.getViewmodel();
 
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (clickListener != null)
-                        clickListener.onItemClick(view, getLayoutPosition());
-                }
-            });
-
-
+        if (viewModel == null) {
+            viewModel = new TaskItemViewModel(context);
+            taskItemBinding.setViewmodel(viewModel);
         }
 
-//        @Override
-//        public void onClick(View v) {
-//            binding.complete.setChecked(true);
+        taskItemBinding.executePendingBindings();
+
+//        Task data = mTasks.get(position);
+//
+//        String title = data.getTaskTitle();
+//        boolean taskCompleted = data.isCompleted();
+//
+//        holder.taskText.setText(title);
+//
+//        if (taskCompleted) {
+//            holder.taskCompletedCheckBox.setChecked(true);
+//            holder.taskCompletedCheckBox.setClickable(false);
+//        } else {
+//            holder.taskCompletedCheckBox.setChecked(false);
+//            holder.taskCompletedCheckBox.setClickable(true);
 //        }
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.task_item, parent, false);
-        return new ViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-
-        Task data = mTasks.get(position);
-
-        String title = data.getTaskTitle();
-        boolean taskCompleted = data.isCompleted();
-
-        holder.taskText.setText(title);
-
-        if (taskCompleted) {
-            holder.taskCompletedCheckBox.setChecked(true);
-            holder.taskCompletedCheckBox.setClickable(false);
-        } else {
-            holder.taskCompletedCheckBox.setChecked(false);
-            holder.taskCompletedCheckBox.setClickable(true);
-        }
 
     }
 
     @Override
     public int getItemCount() {
         return mTasks.size();
+    }
+
+    public static class BindingHolder extends RecyclerView.ViewHolder {
+
+        TaskItemBinding binding;
+
+        public BindingHolder(TaskItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public TaskItemBinding getBinding() {
+            return binding;
+        }
     }
 
     interface OnItemClickListener {
