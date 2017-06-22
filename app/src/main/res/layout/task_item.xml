@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="viewmodel"
             type="michael.com.tasksjavakotlin.java.ui.TaskItemViewModel"/>
@@ -24,7 +26,7 @@
             android:layout_height="wrap_content">
 
             <CheckBox
-                android:checked="@{viewmodel.completed}"
+                android:checked="@{viewmodel.completedCheckBox}"
                 android:id="@+id/complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

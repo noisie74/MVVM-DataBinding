@@ -8,19 +8,10 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.view.View;
 
-import com.android.databinding.library.baseAdapters.BR;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import michael.com.tasksjavakotlin.java.data.DataManager;
-import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
-import michael.com.tasksjavakotlin.java.network.TaskService;
-import retrofit2.Response;
-import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -58,7 +49,7 @@ public class TaskViewModel extends BaseObservable {
 
     public void setProgress(int progress) {
         this.progress = progress;
-        notifyPropertyChanged(BR.progress);
+        notifyPropertyChanged(michael.com.tasksjavakotlin.BR.progress);
     }
 
     public void start() {
@@ -75,7 +66,7 @@ public class TaskViewModel extends BaseObservable {
     }
 
 
-    public void getTaskList() {
+    private void getTaskList() {
         mSubscription.add(mDataManager.getTasks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -17,10 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.databinding.FragmentMainBinding;
+import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
 import michael.com.tasksjavakotlin.java.util.SnackbarUtils;
 
@@ -36,9 +35,7 @@ public class TaskFragment extends Fragment {
     private TaskViewModel mViewModel;
     private Toolbar mToolbar;
     private FloatingActionButton mButtonSave;
-    RecyclerView recyclerView;
-    List<Task> list;
-
+    private DataManager mdataManger;
 
 
     public TaskFragment() {
@@ -56,7 +53,7 @@ public class TaskFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new TaskAdapter(new ArrayList<Task>());
+//        mAdapter = new TaskAdapter(new ArrayList<Task>());
     }
 
     @Nullable
@@ -64,12 +61,10 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.recyclerView.setAdapter(mAdapter);
-//        mAdapter.notifyDataSetChanged();
-//        initView(rootView);
-//        setToolBar();
-//        list = mViewModel.getTaskList();
+//        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        binding.recyclerView.setAdapter(mAdapter);
+
+        setupAdapter();
         mViewModel.loadTasks(true);
 
         return binding.getRoot();
@@ -82,17 +77,22 @@ public class TaskFragment extends Fragment {
         setupSnackBar();
     }
 
-    //    @Override
-//    public void onResume() {
-//        super.onResume();
-//        mViewModel.start();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewModel.start();
+    }
 
-//    private void initView(View view) {
-//        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-//        mButtonSave = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-//
-//    }
+
+    private void setupAdapter() {
+
+        RecyclerView recyclerView = binding.recyclerView;
+
+        mAdapter = new TaskAdapter(new ArrayList<Task>(0),
+                DataManager.provideData(getContext().getApplicationContext()), mViewModel);
+        recyclerView.setAdapter(mAdapter);
+    }
+
 
     private void setupSnackBar() {
         mSnackbarCallBack = new Observable.OnPropertyChangedCallback() {
@@ -121,25 +121,5 @@ public class TaskFragment extends Fragment {
         }
         return true;
     }
-
-//    private void setToolBar() {
-//        mToolbar.inflateMenu(R.menu.menu_main);
-//        setHasOptionsMenu(true);
-//        mToolbar.setTitle(R.string.app_name);
-//        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                int id = item.getItemId();
-//
-//                if (id == R.id.all) {
-//                    //TODO
-//                }
-//                if (id == R.id.completed) {
-//                    //TODO
-//                }
-//                return true;
-//            }
-//        });
-//    }
 
 }

@@ -4,20 +4,47 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 
+import java.util.List;
+
+import michael.com.tasksjavakotlin.java.data.DataManager;
+import michael.com.tasksjavakotlin.java.model.Task;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by mborisovskiy on 6/20/17.
  */
 
 public class TaskItemViewModel extends BaseObservable {
 
+    private CompositeSubscription mSubscription;
     private Context mContext;
+    private DataManager mdataManager;
     public final ObservableField<String> title = new ObservableField<>();
-    public final ObservableField<Boolean> completed = new ObservableField<>();
+    public final ObservableField<Boolean> completedCheckBox = new ObservableField<>();
 
-    public TaskItemViewModel(Context context) {
+    public TaskItemViewModel(Context context, DataManager dataManager) {
         mContext = context.getApplicationContext();
+        mdataManager = dataManager;
+        mSubscription = new CompositeSubscription();
     }
 
+
+    public void onTaskCompleted() {
+        mSubscription.add(mdataManager.getCompletedTasks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Task>>() {
+                    @Override
+                    public void call(List<Task> tasks) {
+
+                        completedCheckBox.set(tasks.get(0).isCompleted());
+                    }
+                })
+        );
+    }
 
     public void taskClicked() {
 

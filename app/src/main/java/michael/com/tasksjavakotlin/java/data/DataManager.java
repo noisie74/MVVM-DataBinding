@@ -30,14 +30,6 @@ public class DataManager {
         final List<Task> tasks = new ArrayList<>();
 
         return TaskService.networkCall().getTasks()
-//                .flatMap(new Func1<Response<ResponseObject>, Observable<List<Task>>>() {
-//                    @Override
-//                    public Observable<List<Task>> call(Response<ResponseObject> responseObjectResponse) {
-//                        List<Task> response = responseObjectResponse.body().getTasksResponse();
-//                        tasks.addAll(response);
-//                        return Observable.just(tasks);
-//                    }
-//                });
                 .map(new Func1<Response<ResponseObject>, List<Task>>() {
                     @Override
                     public List<Task> call(Response<ResponseObject> responseObjectResponse) {
@@ -47,6 +39,25 @@ public class DataManager {
                     }
                 });
     }
+
+
+    public Observable<List<Task>> getCompletedTasks() {
+        return TaskService.networkCall().getTasks()
+                .flatMap(new Func1<Response<ResponseObject>, Observable<Task>>() {
+                    @Override
+                    public Observable<Task> call(Response<ResponseObject> responseObject) {
+                        return Observable.from(responseObject.body().getTasksResponse());
+                    }
+                })
+                .filter(new Func1<Task, Boolean>() {
+                    @Override
+                    public Boolean call(Task task) {
+                        return task.isCompleted();
+                    }
+                })
+                .toList();
+    }
+
 
     public void saveTask() {
 

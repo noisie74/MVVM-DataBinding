@@ -10,6 +10,7 @@ import java.util.List;
 
 import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.databinding.TaskItemBinding;
+import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
 
 /**
@@ -21,10 +22,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     private List<Task> mTasks;
     private TaskViewModel mTasksViewModel;
     private TaskItemViewModel viewModel;
+    private DataManager mDataManager;
     private Context context;
-    
+
 
     public TaskAdapter(List<Task> tasks) {
+        setList(tasks);
+    }
+
+    public TaskAdapter(List<Task> tasks,
+                       DataManager dataManager,
+                       TaskViewModel taskViewModel) {
+        mDataManager = dataManager;
+        mTasksViewModel = taskViewModel;
         setList(tasks);
     }
 
@@ -55,26 +65,24 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         TaskItemViewModel viewModel = taskItemBinding.getViewmodel();
 
         if (viewModel == null) {
-            viewModel = new TaskItemViewModel(context);
+            viewModel = new TaskItemViewModel(context, DataManager.provideData(context.getApplicationContext()));
             taskItemBinding.setViewmodel(viewModel);
         }
 
-        taskItemBinding.executePendingBindings();
+        Task data = mTasks.get(position);
 
-//        Task data = mTasks.get(position);
-//
-//        String title = data.getTaskTitle();
-//        boolean taskCompleted = data.isCompleted();
-//
-//        holder.taskText.setText(title);
-//
-//        if (taskCompleted) {
-//            holder.taskCompletedCheckBox.setChecked(true);
-//            holder.taskCompletedCheckBox.setClickable(false);
-//        } else {
-//            holder.taskCompletedCheckBox.setChecked(false);
-//            holder.taskCompletedCheckBox.setClickable(true);
-//        }
+        String title = data.getTaskTitle();
+        boolean taskCompleted = data.isCompleted();
+
+        taskItemBinding.taskTitle.setText(title);
+
+        if (taskCompleted) {
+            taskItemBinding.complete.setChecked(true);
+        } else {
+            taskItemBinding.complete.setChecked(false);
+        }
+
+        taskItemBinding.executePendingBindings();
 
     }
 
