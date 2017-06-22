@@ -6,14 +6,21 @@ import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import michael.com.tasksjavakotlin.java.data.DataManager;
+import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
+import michael.com.tasksjavakotlin.java.network.TaskService;
+import retrofit2.Response;
+import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -33,8 +40,9 @@ public class TaskViewModel extends BaseObservable {
     public final ObservableList<Task> items = new ObservableArrayList<>();
     public final ObservableField<String> header = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
+    public final ObservableField<String> snackBar = new ObservableField<>();
+
     private final ObservableField<Task> mTaskObservable = new ObservableField<>();
-    final List<Task> cache = new ArrayList<>();
 
 
     public TaskViewModel(Context context, DataManager dataManager) {
@@ -62,64 +70,32 @@ public class TaskViewModel extends BaseObservable {
         if (isLoading) {
 
             getTaskList();
+            setProgress(View.INVISIBLE);
         }
     }
 
-    public List<Task> getTaskList() {
 
-
+    public void getTaskList() {
         mSubscription.add(mDataManager.getTasks()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<List<Task>>() {
-            @Override
-            public void call(List<Task> tasks) {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Task>>() {
+                    @Override
+                    public void call(List<Task> tasks) {
+                        items.addAll(tasks);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        //TODO show snackbar error
+                        snackBar.set("Unable to load Tasks");
+                    }
+                })
+        );
+    }
 
-               cache.addAll(tasks);
-
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-
-            }
-        }));
-
-//        mSubscription = new CompositeSubscription();
-
-//        mSubscription.add(mDataManager.getTasks()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<List<Task>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        setProgress(View.INVISIBLE);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Log.d("ViewModel", e.toString());
-//                    }
-//
-//                    @Override
-//                    public void onNext(List<Task> tasks) {
-//
-//                        List<Task> results = tasks;
-//
-////                        items.addAll(tasks);
-//                        cache.addAll(results);
-//                        for (int i = 0; i <= 3; i++) {
-//
-//                            Log.d("ViewModel", cache.get(i).getTaskTitle());
-//                        }
-//                    }
-//
-//                })
-//        );
-//
-//        return cache;
-//
-        return cache;
-   }
+    public String getSnackbarText() {
+        return snackBar.get();
+    }
 
 }

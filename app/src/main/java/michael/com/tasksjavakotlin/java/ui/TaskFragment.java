@@ -1,6 +1,7 @@
 package michael.com.tasksjavakotlin.java.ui;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import java.util.List;
 import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.databinding.FragmentMainBinding;
 import michael.com.tasksjavakotlin.java.model.Task;
+import michael.com.tasksjavakotlin.java.util.SnackbarUtils;
 
 /**
  * Created by Mikhail on 6/17/17.
@@ -28,6 +30,7 @@ import michael.com.tasksjavakotlin.java.model.Task;
 
 public class TaskFragment extends Fragment {
 
+    private Observable.OnPropertyChangedCallback mSnackbarCallBack;
     private TaskAdapter mAdapter;
     private FragmentMainBinding binding;
     private TaskViewModel mViewModel;
@@ -54,7 +57,6 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAdapter = new TaskAdapter(new ArrayList<Task>());
-
     }
 
     @Nullable
@@ -62,19 +64,25 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(mAdapter);
 //        mAdapter.notifyDataSetChanged();
 //        initView(rootView);
 //        setToolBar();
-        list = mViewModel.getTaskList();
+//        list = mViewModel.getTaskList();
+        mViewModel.loadTasks(true);
 
         return binding.getRoot();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-//    @Override
+        setupSnackBar();
+    }
+
+    //    @Override
 //    public void onResume() {
 //        super.onResume();
 //        mViewModel.start();
@@ -86,6 +94,15 @@ public class TaskFragment extends Fragment {
 //
 //    }
 
+    private void setupSnackBar() {
+        mSnackbarCallBack = new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                SnackbarUtils.showSnackBar(getView(), mViewModel.getSnackbarText());
+            }
+        };
+        mViewModel.snackBar.addOnPropertyChangedCallback(mSnackbarCallBack);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
