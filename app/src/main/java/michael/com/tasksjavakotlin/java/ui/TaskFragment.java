@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -61,11 +62,11 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
-//        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        binding.recyclerView.setAdapter(mAdapter);
+        binding.setView(this);
+        binding.setViewmodel(mViewModel);
 
-        setupAdapter();
         mViewModel.loadTasks(true);
+        setupAdapter();
 
         return binding.getRoot();
     }
@@ -87,6 +88,7 @@ public class TaskFragment extends Fragment {
     private void setupAdapter() {
 
         RecyclerView recyclerView = binding.recyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext().getApplicationContext()));
 
         mAdapter = new TaskAdapter(new ArrayList<Task>(0),
                 DataManager.provideData(getContext().getApplicationContext()), mViewModel);

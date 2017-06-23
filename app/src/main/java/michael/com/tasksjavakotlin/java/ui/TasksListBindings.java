@@ -17,7 +17,7 @@ public class TasksListBindings {
     @BindingAdapter("app:items")
     public static void setItems(RecyclerView view, List<Task> items) {
         TaskAdapter adapter = (TaskAdapter) view.getAdapter();
-        if (adapter != null && items != null)
+        if (adapter != null)
         {
             adapter.replaceData(items);
         }

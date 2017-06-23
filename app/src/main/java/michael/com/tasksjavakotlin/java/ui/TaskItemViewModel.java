@@ -2,6 +2,7 @@ package michael.com.tasksjavakotlin.java.ui;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class TaskItemViewModel extends BaseObservable {
     private CompositeSubscription mSubscription;
     private Context mContext;
     private DataManager mdataManager;
+    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
     public final ObservableField<Boolean> completedCheckBox = new ObservableField<>();
 
@@ -29,6 +31,21 @@ public class TaskItemViewModel extends BaseObservable {
         mContext = context.getApplicationContext();
         mdataManager = dataManager;
         mSubscription = new CompositeSubscription();
+
+        mTaskObservable.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                Task task = mTaskObservable.get();
+                if (task != null) {
+                    title.set(task.getTaskTitle());
+                    if (task.isCompleted()) {
+                        completedCheckBox.set(true);
+                    } else {
+                        completedCheckBox.set(false);
+                    }
+                }
+            }
+        });
     }
 
 
@@ -39,8 +56,8 @@ public class TaskItemViewModel extends BaseObservable {
                 .subscribe(new Action1<List<Task>>() {
                     @Override
                     public void call(List<Task> tasks) {
-
-                        completedCheckBox.set(tasks.get(0).isCompleted());
+                        mTaskObservable.set(tasks.get(0));
+                        notifyChange();
                     }
                 })
         );

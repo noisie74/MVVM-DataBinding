@@ -6,6 +6,7 @@ import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
@@ -74,6 +75,8 @@ public class TaskViewModel extends BaseObservable {
                     @Override
                     public void call(List<Task> tasks) {
                         items.addAll(tasks);
+                        header.set(items.get(0).getTaskTitle());
+                        Log.d("Viewmodel: ", items.get(0).getTaskTitle());
                     }
                 }, new Action1<Throwable>() {
                     @Override

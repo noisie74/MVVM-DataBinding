@@ -6,6 +6,10 @@
         <import type="android.view.View"/>
 
         <variable
+            name="view"
+            type="michael.com.tasksjavakotlin.java.ui.TaskFragment"/>
+
+        <variable
             name="viewmodel"
             type="michael.com.tasksjavakotlin.java.ui.TaskViewModel"/>
     </data>
