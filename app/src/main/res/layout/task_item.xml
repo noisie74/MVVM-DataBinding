@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="michael.com.tasksjavakotlin.java.ui.TaskItemViewModel"/>
+            type="michael.com.tasksjavakotlin.java.ui.TaskAdapter.BindingHolder"/>
     </data>
 
 
@@ -26,14 +26,12 @@
             android:layout_height="wrap_content">
 
             <CheckBox
-                android:checked="@{viewmodel.completedCheckBox}"
                 android:id="@+id/complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>
 
             <TextView
-                android:text="@{viewmodel.title}"
                 android:id="@+id/task_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -54,16 +54,15 @@ public class TaskFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        mAdapter = new TaskAdapter(new ArrayList<Task>());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
-
-        binding.setView(this);
         binding.setViewmodel(mViewModel);
+
+        setHasOptionsMenu(true);
 
         mViewModel.loadTasks(true);
         setupAdapter();

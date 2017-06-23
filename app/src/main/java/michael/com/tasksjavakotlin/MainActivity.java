@@ -1,9 +1,10 @@
 package michael.com.tasksjavakotlin;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.ui.TaskFragment;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setupToolbar();
 
         if (savedInstanceState == null) {
             taskFragment = createFragment();
@@ -41,4 +44,10 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.container, fragment);
         transaction.commit();
     }
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
 }

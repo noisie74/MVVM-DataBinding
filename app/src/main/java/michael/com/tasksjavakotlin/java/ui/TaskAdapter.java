@@ -61,18 +61,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     public void onBindViewHolder(BindingHolder holder, final int position) {
 
         TaskItemBinding taskItemBinding = holder.getBinding();
-
-        TaskItemViewModel viewModel = taskItemBinding.getViewmodel();
-
-        if (viewModel == null) {
-            viewModel = new TaskItemViewModel(context, DataManager.provideData(context.getApplicationContext()));
-            taskItemBinding.setViewmodel(viewModel);
-        }
+//
+//        TaskItemViewModel viewModel = taskItemBinding.getViewmodel();
+//
+//        if (viewModel == null) {
+//            viewModel = new TaskItemViewModel(context, DataManager.provideData(context.getApplicationContext()));
+//            taskItemBinding.setViewmodel(viewModel);
+//        }
 
         Task data = mTasks.get(position);
 
         String title = data.getTaskTitle();
         boolean taskCompleted = data.isCompleted();
+
 
         taskItemBinding.taskTitle.setText(title);
 
