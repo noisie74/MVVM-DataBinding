@@ -1,6 +1,7 @@
 package michael.com.tasksjavakotlin.java.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import michael.com.tasksjavakotlin.java.model.Task;
 import michael.com.tasksjavakotlin.java.network.TaskService;
 import retrofit2.Response;
 import rx.Observable;
+import rx.Single;
 import rx.functions.Func1;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -59,8 +61,21 @@ public class DataManager {
     }
 
 
-    public void saveTask() {
+    public Single<Task> saveTask(Task task) {
+        return TaskService.networkCall().saveTask(task)
+                .map(new Func1<Response<ResponseObject>, Task>() {
+                    @Override
+                    public Task call(Response<ResponseObject> responseObject) {
 
+                        String taskId = responseObject.body().getNewTaskId();
+                        String taskTitle = responseObject.body().getNewTaskTitle();
+                        boolean taskStatus = responseObject.body().getNewTaskStatus();
 
+                        Task responseTask = new Task(taskId,taskTitle,taskStatus);
+                        Log.d("New Task: ", responseTask.toString());
+
+                        return responseTask;
+                    }
+                });
     }
 }

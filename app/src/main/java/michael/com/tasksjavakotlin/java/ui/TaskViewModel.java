@@ -77,6 +77,7 @@ public class TaskViewModel extends BaseObservable {
                     public void call(List<Task> tasks) {
                         items.clear();
                         items.addAll(tasks);
+                        setHeaderText("All tasks");
                         setProgress(View.INVISIBLE);
                         Log.d("Viewmodel: ", items.get(0).getTaskTitle());
                     }
@@ -98,6 +99,7 @@ public class TaskViewModel extends BaseObservable {
                     public void call(List<Task> tasks) {
                         items.clear();
                         items.addAll(tasks);
+                        setHeaderText("Completed tasks");
                         setProgress(View.INVISIBLE);
                     }
                 }, new Action1<Throwable>() {
@@ -109,8 +111,37 @@ public class TaskViewModel extends BaseObservable {
         );
     }
 
+    public void saveTask() {
+
+        Task task = new Task(title.get());
+
+        if (!task.isEmpty()) {
+            mSubscription.add(mDataManager.saveTask(task)
+                    .subscribeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Task>() {
+                        @Override
+                        public void call(Task task) {
+                            items.add(task);
+                            snackBar.set(title + " saved");
+                            title.set("");
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            snackBar.set("Unable to save new Task");
+                        }
+                    }));
+        }
+
+    }
+
+
     public String getSnackbarText() {
         return snackBar.get();
     }
 
+    private void setHeaderText(String text) {
+        header.set(text);
+    }
 }

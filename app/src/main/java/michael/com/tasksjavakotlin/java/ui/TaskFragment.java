@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,6 +74,7 @@ public class TaskFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         setupSnackBar();
+        setupFabButton();
     }
 
     @Override
@@ -97,6 +99,16 @@ public class TaskFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
+    private void setupFabButton() {
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Fragment", "Fab clicked!");
+                mViewModel.saveTask();
+            }
+        });
+    }
 
     private void setupSnackBar() {
         mSnackbarCallBack = new Observable.OnPropertyChangedCallback() {
