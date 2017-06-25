@@ -25,11 +25,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     private DataManager mDataManager;
     private Context context;
 
-
-    public TaskAdapter(List<Task> tasks) {
-        setList(tasks);
-    }
-
     public TaskAdapter(List<Task> tasks,
                        DataManager dataManager,
                        TaskViewModel taskViewModel) {
@@ -45,7 +40,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
     private void setList(List<Task> tasks) {
         mTasks = tasks;
-
     }
 
     @Override
@@ -59,22 +53,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
     @Override
     public void onBindViewHolder(BindingHolder holder, final int position) {
-
         TaskItemBinding taskItemBinding = holder.getBinding();
-//
-//        TaskItemViewModel viewModel = taskItemBinding.getViewmodel();
-//
-//        if (viewModel == null) {
-//            viewModel = new TaskItemViewModel(context, DataManager.provideData(context.getApplicationContext()));
-//            taskItemBinding.setViewmodel(viewModel);
-//        }
+        Task mTask = mTasks.get(position);
+        bindTask(taskItemBinding, mTask);
+        taskItemBinding.executePendingBindings();
+    }
 
-        Task data = mTasks.get(position);
-
-        String title = data.getTaskTitle();
-        boolean taskCompleted = data.isCompleted();
-
-
+    private void bindTask(TaskItemBinding taskItemBinding, Task task) {
+        String title = task.getTaskTitle();
+        boolean taskCompleted = task.isCompleted();
         taskItemBinding.taskTitle.setText(title);
 
         if (taskCompleted) {
@@ -82,9 +69,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         } else {
             taskItemBinding.complete.setChecked(false);
         }
-
-        taskItemBinding.executePendingBindings();
-
     }
 
     @Override

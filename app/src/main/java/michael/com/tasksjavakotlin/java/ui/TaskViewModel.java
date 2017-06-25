@@ -57,15 +57,16 @@ public class TaskViewModel extends BaseObservable {
         loadTasks(false);
     }
 
+    public void stop() {
+        mSubscription.clear();
+    }
+
     public void loadTasks(boolean isLoading) {
 
         if (isLoading) {
-
             getTaskList();
-            setProgress(View.INVISIBLE);
         }
     }
-
 
     private void getTaskList() {
         mSubscription.add(mDataManager.getTasks()
@@ -74,14 +75,34 @@ public class TaskViewModel extends BaseObservable {
                 .subscribe(new Action1<List<Task>>() {
                     @Override
                     public void call(List<Task> tasks) {
+                        items.clear();
                         items.addAll(tasks);
-                        header.set(items.get(0).getTaskTitle());
+                        setProgress(View.INVISIBLE);
                         Log.d("Viewmodel: ", items.get(0).getTaskTitle());
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        //TODO show snackbar error
+                        snackBar.set("Unable to load Tasks");
+                    }
+                })
+        );
+    }
+
+    public void loadCompletedTasks() {
+        mSubscription.add(mDataManager.getCompletedTasks()
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Task>>() {
+                    @Override
+                    public void call(List<Task> tasks) {
+                        items.clear();
+                        items.addAll(tasks);
+                        setProgress(View.INVISIBLE);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
                         snackBar.set("Unable to load Tasks");
                     }
                 })

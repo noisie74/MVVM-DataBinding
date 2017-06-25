@@ -34,10 +34,6 @@ public class TaskFragment extends Fragment {
     private TaskAdapter mAdapter;
     private FragmentMainBinding binding;
     private TaskViewModel mViewModel;
-    private Toolbar mToolbar;
-    private FloatingActionButton mButtonSave;
-    private DataManager mdataManger;
-
 
     public TaskFragment() {
     }
@@ -60,10 +56,12 @@ public class TaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+        binding.setView(this);
         binding.setViewmodel(mViewModel);
 
         setHasOptionsMenu(true);
 
+        mViewModel.setProgress(View.VISIBLE);
         mViewModel.loadTasks(true);
         setupAdapter();
 
@@ -83,6 +81,11 @@ public class TaskFragment extends Fragment {
         mViewModel.start();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mViewModel.stop();
+    }
 
     private void setupAdapter() {
 
@@ -114,10 +117,12 @@ public class TaskFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.all:
-                //TODO
+                mViewModel.setProgress(View.VISIBLE);
+                mViewModel.loadTasks(true);
                 break;
             case R.id.completed:
-                //TODO
+                mViewModel.setProgress(View.VISIBLE);
+                mViewModel.loadCompletedTasks();
                 break;
         }
         return true;
