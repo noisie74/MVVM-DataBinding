@@ -90,7 +90,7 @@ public class TaskFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext().getApplicationContext()));
 
         mAdapter = new TaskAdapter(new ArrayList<Task>(0),
-                DataManager.provideData(getContext().getApplicationContext()), mViewModel);
+                mViewModel);
         recyclerView.setAdapter(mAdapter);
     }
 

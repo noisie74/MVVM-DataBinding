@@ -31,9 +31,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     }
 
     public TaskAdapter(List<Task> tasks,
-                       DataManager dataManager,
+
                        TaskViewModel taskViewModel) {
-        mDataManager = dataManager;
         mTasksViewModel = taskViewModel;
         setList(tasks);
     }
