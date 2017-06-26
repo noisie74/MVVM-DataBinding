@@ -82,4 +82,14 @@ public class DataManager {
                     }
                 });
     }
+
+//    public Single<Task> updateTask(Task task) {
+//        return TaskService.networkCall().updateTask(task.getId(), task)
+//                .map(new Func1<Response<ResponseObject>, Task>() {
+//                    @Override
+//                    public Task call(Response<ResponseObject> responseObject) {
+//                        return responseObject.body().getTasksResponse();
+//                    }
+//                });
+//    }
 }

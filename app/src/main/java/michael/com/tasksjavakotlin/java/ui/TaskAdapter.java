@@ -3,8 +3,11 @@ package michael.com.tasksjavakotlin.java.ui;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.List;
 
@@ -24,12 +27,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     private TaskItemViewModel viewModel;
     private DataManager mDataManager;
     private Context context;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Task task);
+    }
 
     public TaskAdapter(List<Task> tasks,
                        DataManager dataManager,
-                       TaskViewModel taskViewModel) {
+                       TaskViewModel taskViewModel,
+                       OnItemClickListener listener) {
         mDataManager = dataManager;
         mTasksViewModel = taskViewModel;
+        mListener = listener;
         setList(tasks);
     }
 
@@ -54,9 +64,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     @Override
     public void onBindViewHolder(BindingHolder holder, final int position) {
         TaskItemBinding taskItemBinding = holder.getBinding();
-        Task mTask = mTasks.get(position);
+        final Task mTask = mTasks.get(position);
         bindTask(taskItemBinding, mTask);
+        setTaskClickListener(taskItemBinding, mTask);
         taskItemBinding.executePendingBindings();
+    }
+
+    private void setTaskClickListener(TaskItemBinding taskItemBinding, final Task task) {
+        taskItemBinding.complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(task);
+                Log.d("Adapter", task.getTaskTitle() + " Clicked");
+            }
+        });
     }
 
     private void bindTask(TaskItemBinding taskItemBinding, Task task) {
@@ -83,11 +104,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         public BindingHolder(TaskItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
         }
 
         public TaskItemBinding getBinding() {
             return binding;
         }
+
     }
 
 }

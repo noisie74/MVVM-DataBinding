@@ -94,7 +94,14 @@ public class TaskFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext().getApplicationContext()));
 
         mAdapter = new TaskAdapter(new ArrayList<Task>(0),
-                DataManager.provideData(getContext().getApplicationContext()), mViewModel);
+                DataManager.provideData(getContext().getApplicationContext()), mViewModel, new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Task task) {
+                mViewModel.taskClicked(task);
+                Log.d("Fragment", task.getTaskTitle() + " Clicked");
+
+            }
+        });
         recyclerView.setAdapter(mAdapter);
     }
 

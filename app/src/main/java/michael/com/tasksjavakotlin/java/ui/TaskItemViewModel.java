@@ -48,22 +48,4 @@ public class TaskItemViewModel extends BaseObservable {
         });
     }
 
-
-    public void onTaskCompleted() {
-        mSubscription.add(mdataManager.getCompletedTasks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Task>>() {
-                    @Override
-                    public void call(List<Task> tasks) {
-                        mTaskObservable.set(tasks.get(0));
-                        notifyChange();
-                    }
-                })
-        );
-    }
-
-    public void taskClicked() {
-
-    }
 }

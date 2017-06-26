@@ -22,6 +22,8 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Created by Mikhail on 6/17/17.
  */
@@ -33,13 +35,11 @@ public class TaskViewModel extends BaseObservable {
     private Context mContext;
 
     private int progress;
+    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
     public final ObservableList<Task> items = new ObservableArrayList<>();
     public final ObservableField<String> header = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
     public final ObservableField<String> snackBar = new ObservableField<>();
-
-    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
-
 
     public TaskViewModel(Context context, DataManager dataManager) {
         mContext = context.getApplicationContext();
@@ -144,6 +144,39 @@ public class TaskViewModel extends BaseObservable {
                 }));
     }
 
+
+    public void taskClicked(Task task) {
+        changeTaskStatus(task);
+        updateTask(task);
+    }
+
+    private void updateTask(Task task) {
+        mSubscription.add(TaskService.networkCall().updateTask(task.getId(), task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<Response<ResponseObject>>() {
+                    @Override
+                    public void onSuccess(Response<ResponseObject> updatedTask) {
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        snackBar.set("Unable to update task");
+                    }
+                })
+        );
+    }
+
+    private void changeTaskStatus(Task task) {
+        checkNotNull(task);
+        if (task.isCompleted()) {
+            task.setIsCompleted(false);
+            snackBar.set(task.getTaskTitle() + " todo!");
+        } else {
+            task.setIsCompleted(true);
+            snackBar.set(task.getTaskTitle() + " done!");
+        }
+    }
 
     public String getSnackbarText() {
         return snackBar.get();
