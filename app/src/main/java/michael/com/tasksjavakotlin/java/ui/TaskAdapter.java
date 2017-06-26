@@ -3,7 +3,9 @@ package michael.com.tasksjavakotlin.java.ui;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -24,16 +26,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     private TaskItemViewModel viewModel;
     private DataManager mDataManager;
     private Context context;
+    private OnItemClickListener mListener;
 
-
-    public TaskAdapter(List<Task> tasks) {
-        setList(tasks);
+    public interface OnItemClickListener {
+        void onItemClick(Task task);
     }
 
     public TaskAdapter(List<Task> tasks,
-
-                       TaskViewModel taskViewModel) {
+                       DataManager dataManager,
+                       TaskViewModel taskViewModel,
+                       OnItemClickListener listener) {
+        mDataManager = dataManager;
         mTasksViewModel = taskViewModel;
+        mListener = listener;
         setList(tasks);
     }
 
@@ -44,7 +49,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
     private void setList(List<Task> tasks) {
         mTasks = tasks;
-
     }
 
     @Override
@@ -58,22 +62,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
     @Override
     public void onBindViewHolder(BindingHolder holder, final int position) {
-
         TaskItemBinding taskItemBinding = holder.getBinding();
-//
-//        TaskItemViewModel viewModel = taskItemBinding.getViewmodel();
-//
-//        if (viewModel == null) {
-//            viewModel = new TaskItemViewModel(context, DataManager.provideData(context.getApplicationContext()));
-//            taskItemBinding.setViewmodel(viewModel);
-//        }
+        final Task mTask = mTasks.get(position);
+        bindTask(taskItemBinding, mTask);
+        setTaskClickListener(taskItemBinding, mTask);
+        taskItemBinding.executePendingBindings();
+    }
 
-        Task data = mTasks.get(position);
+    private void setTaskClickListener(TaskItemBinding taskItemBinding, final Task task) {
+        taskItemBinding.complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(task);
+                Log.d("Adapter", task.getTaskTitle() + " Clicked");
+            }
+        });
+    }
 
-        String title = data.getTaskTitle();
-        boolean taskCompleted = data.isCompleted();
-
-
+    private void bindTask(TaskItemBinding taskItemBinding, Task task) {
+        String title = task.getTaskTitle();
+        boolean taskCompleted = task.isCompleted();
         taskItemBinding.taskTitle.setText(title);
 
         if (taskCompleted) {
@@ -81,9 +89,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         } else {
             taskItemBinding.complete.setChecked(false);
         }
-
-        taskItemBinding.executePendingBindings();
-
     }
 
     @Override
@@ -98,11 +103,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         public BindingHolder(TaskItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
         }
 
         public TaskItemBinding getBinding() {
             return binding;
         }
+
     }
 
 }

@@ -5,13 +5,8 @@ import android.databinding.BaseObservable;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 
-import java.util.List;
-
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -48,22 +43,4 @@ public class TaskItemViewModel extends BaseObservable {
         });
     }
 
-
-    public void onTaskCompleted() {
-        mSubscription.add(mdataManager.getCompletedTasks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Task>>() {
-                    @Override
-                    public void call(List<Task> tasks) {
-                        mTaskObservable.set(tasks.get(0));
-                        notifyChange();
-                    }
-                })
-        );
-    }
-
-    public void taskClicked() {
-
-    }
 }

@@ -8,7 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,10 +34,6 @@ public class TaskFragment extends Fragment {
     private TaskAdapter mAdapter;
     private FragmentMainBinding binding;
     private TaskViewModel mViewModel;
-    private Toolbar mToolbar;
-    private FloatingActionButton mButtonSave;
-    private DataManager mdataManger;
-
 
     public TaskFragment() {
     }
@@ -60,10 +56,12 @@ public class TaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+        binding.setView(this);
         binding.setViewmodel(mViewModel);
 
         setHasOptionsMenu(true);
 
+        mViewModel.setProgress(View.VISIBLE);
         mViewModel.loadTasks(true);
         setupAdapter();
 
@@ -75,6 +73,7 @@ public class TaskFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         setupSnackBar();
+        setupFabButton();
     }
 
     @Override
@@ -83,6 +82,11 @@ public class TaskFragment extends Fragment {
         mViewModel.start();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mViewModel.stop();
+    }
 
     private void setupAdapter() {
 
@@ -90,10 +94,28 @@ public class TaskFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext().getApplicationContext()));
 
         mAdapter = new TaskAdapter(new ArrayList<Task>(0),
-                mViewModel);
+                DataManager.provideData(getContext().getApplicationContext()), mViewModel, new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Task task) {
+                mViewModel.taskClicked(task);
+                Log.d("Fragment", task.getTaskTitle() + " Clicked");
+
+            }
+        });
         recyclerView.setAdapter(mAdapter);
     }
 
+    private void setupFabButton() {
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Fragment", "Fab clicked!");
+                mViewModel.saveTask(binding.editText.getText().toString());
+                mViewModel.title.set("");
+            }
+        });
+    }
 
     private void setupSnackBar() {
         mSnackbarCallBack = new Observable.OnPropertyChangedCallback() {
@@ -114,10 +136,12 @@ public class TaskFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.all:
-                //TODO
+                mViewModel.setProgress(View.VISIBLE);
+                mViewModel.loadTasks(true);
                 break;
             case R.id.completed:
-                //TODO
+                mViewModel.setProgress(View.VISIBLE);
+                mViewModel.loadCompletedTasks();
                 break;
         }
         return true;

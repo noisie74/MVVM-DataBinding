@@ -25,8 +25,12 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             taskFragment = createFragment();
         }
+
         viewModel = new TaskViewModel(getApplicationContext(), DataManager.provideData(getApplicationContext()));
-        taskFragment.setViewModel(viewModel);
+
+        if (viewModel != null) {
+            taskFragment.setViewModel(viewModel);
+        }
 
     }
 

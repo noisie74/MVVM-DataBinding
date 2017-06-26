@@ -36,4 +36,5 @@ ext {
     retrofitVersion = '2.3.0'
     gsonVersion = '2.1.0'
     adapterRxJavaVersion = '2.0.2'
+    daggerVersion = '2.11'
 }
