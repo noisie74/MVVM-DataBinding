@@ -70,16 +70,15 @@ public class DataManager {
         return TaskService.networkCall().saveTask(task)
                 .map(new Func1<Response<ResponseObject>, Task>() {
                     @Override
-                    public Task call(Response<ResponseObject> responseObject) {
+                    public Task call(Response<ResponseObject> newTask) {
 
-                        String taskId = responseObject.body().getNewTaskId();
-                        String taskTitle = responseObject.body().getNewTaskTitle();
-                        boolean taskStatus = responseObject.body().getNewTaskStatus();
+                        String taskId = newTask.body().getNewTaskId();
+                        String taskTitle = newTask.body().getNewTaskTitle();
+                        boolean taskStatus = newTask.body().getNewTaskStatus();
 
-                        Task responseTask = new Task(taskId,taskTitle,taskStatus);
-                        Log.d("New Task: ", responseTask.toString());
+                        Task task = new Task(taskId,taskTitle,taskStatus);
 
-                        return responseTask;
+                        return task;
                     }
                 });
     }

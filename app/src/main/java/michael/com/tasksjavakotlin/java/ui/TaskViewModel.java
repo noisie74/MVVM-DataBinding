@@ -115,25 +115,26 @@ public class TaskViewModel extends BaseObservable {
         );
     }
 
-    public void saveTask(String text) {
+    public void saveTask(String taskTitle) {
 
-        Task task = new Task(text);
+        Task task = new Task(taskTitle);
 
-        mSubscription.add(TaskService.networkCall().saveTask(task)
+        if (!task.isEmpty()) {
+            createTask(task);
+        } else {
+            snackBar.set("Task cannot be empty!");
+        }
+    }
+
+    private void createTask(Task task) {
+        mSubscription.add(mDataManager.saveTask(task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleSubscriber<Response<ResponseObject>>() {
+                .subscribe(new SingleSubscriber<Task>() {
                     @Override
-                    public void onSuccess(Response<ResponseObject> value) {
-                        String taskId = value.body().getNewTaskId();
-                        String taskTitle = value.body().getNewTaskTitle();
-                        boolean taskStatus = value.body().getNewTaskStatus();
-
-                        Task responseTask = new Task(taskId, taskTitle, taskStatus);
-                        items.add(responseTask);
-                        Log.d("SaveTask ViewModel: ", value.toString());
-                        snackBar.set(title + " saved");
-                        title.set("");
+                    public void onSuccess(Task newTask) {
+                        items.add(newTask);
+                        snackBar.set(newTask.getTaskTitle() + " saved");
                     }
 
                     @Override
@@ -141,63 +142,6 @@ public class TaskViewModel extends BaseObservable {
                         snackBar.set("Unable to save new Task");
                     }
                 }));
-//                .subscribe(new Action1<Response<ResponseObject>>() {
-//                    @Override
-//                    public void call(Response<ResponseObject> responseObject) {
-//                        String taskId = responseObject.body().getNewTaskId();
-//                        String taskTitle = responseObject.body().getNewTaskTitle();
-//                        boolean taskStatus = responseObject.body().getNewTaskStatus();
-//
-//                        Task responseTask = new Task(taskId, taskTitle, taskStatus);
-//                        items.add(responseTask);
-//                        Log.d("SaveTask ViewModel: ", responseObject.toString());
-//                        snackBar.set(title + " saved");
-//                        title.set("");
-//                    }
-//                }, new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        snackBar.set("Unable to save new Task");
-//                    }
-//                }));
-
-
-//                .subscribe(new Action1<Task>() {
-//                    @Override
-//                    public void call(Task task) {
-//                        Log.d("SaveTask ViewModel: ", task.toString());
-//                        items.add(task);
-//                        snackBar.set(title + " saved");
-//                        title.set("");
-//                    }
-//                }, new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        snackBar.set("Unable to save new Task");
-//                    }
-//                }));
-
-
-//        if (!task.isEmpty()) {
-//            mSubscription.add(mDataManager.saveTask(task)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Action1<Task>() {
-//                        @Override
-//                        public void call(Task task) {
-//                            Log.d("SaveTask ViewModel: ", task.toString());
-//                            items.add(task);
-//                            snackBar.set(title + " saved");
-//                            title.set("");
-//                        }
-//                    }, new Action1<Throwable>() {
-//                        @Override
-//                        public void call(Throwable throwable) {
-//                            snackBar.set("Unable to save new Task");
-//                        }
-//                    }));
-//        }
-
     }
 
 
