@@ -39,6 +39,11 @@ public class DataManager {
                         tasks.addAll(response);
                         return tasks;
                     }
+                }).takeUntil(new Func1<List<Task>, Boolean>() {
+                    @Override
+                    public Boolean call(List<Task> tasks) {
+                        return tasks == null;
+                    }
                 });
     }
 

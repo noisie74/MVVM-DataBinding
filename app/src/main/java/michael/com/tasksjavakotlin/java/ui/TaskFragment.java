@@ -105,7 +105,8 @@ public class TaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("Fragment", "Fab clicked!");
-                mViewModel.saveTask();
+                mViewModel.saveTask(binding.editText.getText().toString());
+                mViewModel.title.set("");
             }
         });
     }
