@@ -2,10 +2,9 @@ package michael.com.tasksjavakotlin;
 
 import android.app.Application;
 
-import michael.com.tasksjavakotlin.java.data.DataManager;
+import michael.com.tasksjavakotlin.java.di.AppComponent;
 import michael.com.tasksjavakotlin.java.di.ApplicationModule;
-import michael.com.tasksjavakotlin.java.di.DataComponent;
-import michael.com.tasksjavakotlin.java.di.DataModule;
+import michael.com.tasksjavakotlin.java.di.DaggerAppComponent;
 
 /**
  * Created by mborisovskiy on 6/26/17.
@@ -13,33 +12,39 @@ import michael.com.tasksjavakotlin.java.di.DataModule;
 
 public class TasksApplication extends Application {
 
-    private DataComponent mDataComponent;
+    private AppComponent mComponent;
+    private static TasksApplication app;
 
 //    private ApplicationModule appModule;
 //    private DataModule dataModule;
-//    private DataComponent appComponent;
+//    private AppComponent appComponent;
+
+
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mDataComponent = DaggerDataComponent.builder()
-                .applicationModule(new ApplicationModule(getApplicationContext()))
-                .build();
-
+        initInjector();
     }
 
-    public DataComponent getDataManagerComponent() {
-        return mDataComponent;
+    public AppComponent getAppComponent() {
+        return mComponent;
+    }
+
+    private void initInjector() {
+        mComponent = DaggerAppComponent.builder()
+                .applicationModule(new ApplicationModule((getApplicationContext())))
+                .build();
     }
 
     public static TasksApplication getApplication() {
         return new TasksApplication();
     }
 
-//    public DataComponent getComponent() {
-//        return appComponent;
-//    }
+    public AppComponent getComponent() {
+        return mComponent;
+    }
 //
 ////    public ApplicationModule getAppModule() {
 ////        if (appModule == null) {

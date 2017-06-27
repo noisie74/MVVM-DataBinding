@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import michael.com.tasksjavakotlin.TasksApplication;
+import michael.com.tasksjavakotlin.java.di.AppComponent;
 import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
 import michael.com.tasksjavakotlin.java.network.TaskApi;
@@ -17,11 +19,11 @@ import rx.Single;
 import rx.functions.Func1;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static michael.com.tasksjavakotlin.TasksApplication.getApplication;
 
 /**
  * Created by Mikhail on 6/18/17.
  */
-
 public class DataManager {
 
     Context mContext;
@@ -30,7 +32,19 @@ public class DataManager {
     @Inject
     public DataManager(Context context) {
         mContext = context;
+//        getAppComponent().getAppComponent().provideApi();
+
+        ((TasksApplication) getApplication()).getAppComponent().inject(this);
+
     }
+
+    private AppComponent getAppComponent() {
+        return getApplication().getAppComponent();
+    }
+
+//    private AppComponent getAppComponent() {
+//        return TasksApplication
+//    }
 
     public static DataManager provideData(Context context) {
         checkNotNull(context);

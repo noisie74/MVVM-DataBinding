@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TaskViewModel extends BaseObservable {
 
     private CompositeSubscription mSubscription;
-    private DataManager mDataManager;
+//    private DataManager mDataManager;
     private Context mContext;
     @Inject DataManager dataManager;
 
@@ -46,11 +46,16 @@ public class TaskViewModel extends BaseObservable {
     public final ObservableField<String> title = new ObservableField<>();
     public final ObservableField<String> snackBar = new ObservableField<>();
 
-    public TaskViewModel(Context context, DataManager dataManager) {
+    public TaskViewModel(Context context, DataManager manager) {
+//        getAppComponent().getAppComponent().inject(this);
         mContext = context.getApplicationContext();
-        mDataManager = dataManager;
+        dataManager = manager;
         mSubscription = new CompositeSubscription();
     }
+
+//    private TasksApplication getAppComponent() {
+//        return ((TasksApplication) getAppComponent());
+//    }
 
     @Bindable
     public int getProgress() {
@@ -78,7 +83,7 @@ public class TaskViewModel extends BaseObservable {
     }
 
     private void getTaskList() {
-        mSubscription.add(mDataManager.getTasks()
+        mSubscription.add(dataManager.getTasks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Task>>() {
@@ -100,7 +105,7 @@ public class TaskViewModel extends BaseObservable {
     }
 
     public void loadCompletedTasks() {
-        mSubscription.add(mDataManager.getCompletedTasks()
+        mSubscription.add(dataManager.getCompletedTasks()
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Task>>() {
@@ -132,7 +137,7 @@ public class TaskViewModel extends BaseObservable {
     }
 
     private void createTask(Task task) {
-        mSubscription.add(mDataManager.saveTask(task)
+        mSubscription.add(dataManager.saveTask(task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleSubscriber<Task>() {

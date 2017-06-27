@@ -19,18 +19,14 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    Retrofit networkCall() {
+    TaskApi provideApiService() {
 
-        return new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-    }
 
-    @Provides
-    @Singleton
-    TaskApi provideApiService(Retrofit retrofit) {
-        return networkCall().create(TaskApi.class);
+        return retrofit.create(TaskApi.class);
     }
 }

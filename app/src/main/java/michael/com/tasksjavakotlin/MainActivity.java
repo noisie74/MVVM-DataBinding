@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import javax.inject.Inject;
+
+import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.ui.TaskFragment;
 import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
 
@@ -13,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     TaskViewModel viewModel;
     TaskFragment taskFragment;
+    @Inject DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +29,24 @@ public class MainActivity extends AppCompatActivity {
             taskFragment = createFragment();
         }
 
-        viewModel = new TaskViewModel();
+//        getAppComponent();
+
+        ((TasksApplication) getApplication()).getAppComponent().inject(this);
+
+
+        viewModel = new TaskViewModel(getApplicationContext(),dataManager);
 
         if (viewModel != null) {
             taskFragment.setViewModel(viewModel);
         }
 
     }
+
+
+
+//    private AppComponent getAppComponent() {
+//        return TasksApplication.getApplication().getAppComponent();
+//    }
 
     private TaskFragment createFragment() {
         TaskFragment taskFragment = (TaskFragment) getSupportFragmentManager().findFragmentById(R.id.container);
