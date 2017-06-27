@@ -1,9 +1,6 @@
 package michael.com.tasksjavakotlin.java.di;
 
-import android.app.Application;
 import android.content.Context;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,21 +12,16 @@ import dagger.Provides;
 @Module
 public class ApplicationModule {
 
-    private Application app;
+    private final Context mContext;
 
-    public ApplicationModule(Application app) {
-        this.app = app;
+//    private Application app;
+
+    public ApplicationModule(Context context) {
+        mContext = context;
     }
 
-//    @Provides
-//    @Singleton
-//    TasksApplication provideApplication() {
-//        return (TasksApplication) app;
-//    }
-
     @Provides
-    @Singleton
     Context provideContext() {
-        return app;
+        return mContext;
     }
 }

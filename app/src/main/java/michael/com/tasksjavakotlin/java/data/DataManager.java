@@ -5,8 +5,11 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
+import michael.com.tasksjavakotlin.java.network.TaskApi;
 import michael.com.tasksjavakotlin.java.network.TaskService;
 import retrofit2.Response;
 import rx.Observable;
@@ -21,16 +24,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DataManager {
 
+    Context mContext;
+    @Inject TaskApi taskApi;
+
+    @Inject
+    public DataManager(Context context) {
+        mContext = context;
+    }
+
     public static DataManager provideData(Context context) {
         checkNotNull(context);
-        return new DataManager();
+        return new DataManager(context);
     }
 
     public Observable<List<Task>> getTasks() {
 
         final List<Task> tasks = new ArrayList<>();
 
-        return TaskService.networkCall().getTasks()
+        return taskApi.getTasks()
                 .map(new Func1<Response<ResponseObject>, List<Task>>() {
                     @Override
                     public List<Task> call(Response<ResponseObject> responseObjectResponse) {
@@ -75,20 +86,11 @@ public class DataManager {
                         String taskTitle = newTask.body().getNewTaskTitle();
                         boolean taskStatus = newTask.body().getNewTaskStatus();
 
-                        Task task = new Task(taskId,taskTitle,taskStatus);
+                        Task task = new Task(taskId, taskTitle, taskStatus);
 
                         return task;
                     }
                 });
     }
 
-//    public Single<Task> updateTask(Task task) {
-//        return TaskService.networkCall().updateTask(task.getId(), task)
-//                .map(new Func1<Response<ResponseObject>, Task>() {
-//                    @Override
-//                    public Task call(Response<ResponseObject> responseObject) {
-//                        return responseObject.body().getTasksResponse();
-//                    }
-//                });
-//    }
 }

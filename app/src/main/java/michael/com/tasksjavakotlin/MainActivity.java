@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.ui.TaskFragment;
 import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
 
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             taskFragment = createFragment();
         }
 
-        viewModel = new TaskViewModel(getApplicationContext(), DataManager.provideData(getApplicationContext()));
+        viewModel = new TaskViewModel();
 
         if (viewModel != null) {
             taskFragment.setViewModel(viewModel);

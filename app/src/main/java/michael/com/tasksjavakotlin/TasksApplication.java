@@ -2,8 +2,9 @@ package michael.com.tasksjavakotlin;
 
 import android.app.Application;
 
-import michael.com.tasksjavakotlin.java.di.AppComponent;
+import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.di.ApplicationModule;
+import michael.com.tasksjavakotlin.java.di.DataComponent;
 import michael.com.tasksjavakotlin.java.di.DataModule;
 
 /**
@@ -12,42 +13,47 @@ import michael.com.tasksjavakotlin.java.di.DataModule;
 
 public class TasksApplication extends Application {
 
-    private ApplicationModule appModule;
-    private DataModule dataModule;
-    private AppComponent appComponent;
+    private DataComponent mDataComponent;
+
+//    private ApplicationModule appModule;
+//    private DataModule dataModule;
+//    private DataComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerComponent.builder()
-//                .appModule(new ApplicationModule(this))
-                .dataModule(new DataModule(this))
+        mDataComponent = DaggerDataComponent.builder()
+                .applicationModule(new ApplicationModule(getApplicationContext()))
                 .build();
 
+    }
+
+    public DataComponent getDataManagerComponent() {
+        return mDataComponent;
     }
 
     public static TasksApplication getApplication() {
         return new TasksApplication();
     }
 
-    public AppComponent getComponent() {
-        return appComponent;
-    }
-
-//    public ApplicationModule getAppModule() {
-//        if (appModule == null) {
-//            appModule = new ApplicationModule(this);
-//        }
-//        return appModule;
+//    public DataComponent getComponent() {
+//        return appComponent;
 //    }
-
-    public DataModule getDataModule() {
-        if (dataModule == null) {
-            dataModule = new DataModule(this);
-        }
-        return dataModule;
-    }
+//
+////    public ApplicationModule getAppModule() {
+////        if (appModule == null) {
+////            appModule = new ApplicationModule(this);
+////        }
+////        return appModule;
+////    }
+//
+//    public DataModule getDataModule() {
+//        if (dataModule == null) {
+//            dataModule = new DataModule(this);
+//        }
+//        return dataModule;
+//    }
 }
 
 
