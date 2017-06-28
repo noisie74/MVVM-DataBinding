@@ -86,18 +86,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         String title = task.getTaskTitle();
         boolean taskCompleted = task.isCompleted();
 
-        viewModel.taskTitle.set(title);
+//        viewModel.taskTitle.set(title);
 
 //        taskItemBinding.taskTitle.setText(title);
 //
-        if (taskCompleted) {
-            viewModel.completedCheckBox.set(true);
-//            taskItemBinding.complete.setChecked(true);
-        } else {
-//            taskItemBinding.complete.setChecked(false);
-            viewModel.completedCheckBox.set(false);
-
-        }
+//        if (taskCompleted) {
+//            viewModel.completedCheckBox.set(true);
+////            taskItemBinding.complete.setChecked(true);
+//        } else {
+////            taskItemBinding.complete.setChecked(false);
+//            viewModel.completedCheckBox.set(false);
+//
+//        }
     }
 
     @Override

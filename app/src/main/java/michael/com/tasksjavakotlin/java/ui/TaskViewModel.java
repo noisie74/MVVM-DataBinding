@@ -27,8 +27,6 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Created by Mikhail on 6/17/17.
  */
@@ -200,7 +198,7 @@ public class TaskViewModel extends BaseObservable {
 
 
     public void taskClicked(Task task) {
-        changeTaskStatus(task);
+//        changeTaskStatus(task);
         updateTask(task);
     }
 
@@ -211,6 +209,7 @@ public class TaskViewModel extends BaseObservable {
                 .subscribe(new SingleSubscriber<Response<ResponseObject>>() {
                     @Override
                     public void onSuccess(Response<ResponseObject> updatedTask) {
+                        notifyChange();
                     }
 
                     @Override
@@ -221,16 +220,16 @@ public class TaskViewModel extends BaseObservable {
         );
     }
 
-    private void changeTaskStatus(Task task) {
-        checkNotNull(task);
-        if (task.isCompleted()) {
-            task.setIsCompleted(false);
-            snackBar.set(task.getTaskTitle() + " todo!");
-        } else {
-            task.setIsCompleted(true);
-            snackBar.set(task.getTaskTitle() + " done!");
-        }
-    }
+//    private void changeTaskStatus(Task task) {
+//        checkNotNull(task);
+//        if (task.isCompleted()) {
+//            task.setIsCompleted(false);
+//            snackBar.set(task.getTaskTitle() + " todo!");
+//        } else {
+//            task.setIsCompleted(true);
+//            snackBar.set(task.getTaskTitle() + " done!");
+//        }
+//    }
 
 
     public String getSnackbarText() {
