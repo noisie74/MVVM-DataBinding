@@ -3,6 +3,7 @@ package michael.com.tasksjavakotlin.java.ui;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
@@ -44,6 +45,8 @@ public class TaskViewModel extends BaseObservable {
     public final ObservableField<String> header = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
     public final ObservableField<String> snackBar = new ObservableField<>();
+    public final ObservableField<String> taskTitle = new ObservableField<>();
+    public final ObservableField<Boolean> completedCheckBox = new ObservableField<>();
 
     public TaskViewModel(Context context, DataManager manager) {
         mContext = context.getApplicationContext();
@@ -51,6 +54,41 @@ public class TaskViewModel extends BaseObservable {
         mSubscription = new CompositeSubscription();
 
         TasksApplication.getApplication().getAppComponent().inject(this);
+
+        mTaskObservable.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                Task task = mTaskObservable.get();
+                if (task != null) {
+                    taskTitle.set(task.getTaskTitle());
+                    if (task.isCompleted()) {
+                        completedCheckBox.set(true);
+                    } else {
+                        completedCheckBox.set(false);
+                    }
+                }
+            }
+        });
+    }
+
+    @Bindable
+    public boolean getCompleted() {
+        return mTaskObservable.get().isCompleted();
+    }
+
+    public void setCompleted(boolean completed) {
+        Task task = mTaskObservable.get();
+
+        // Update the entity
+        task.setCompleted(completed);
+    }
+
+    @Bindable
+    public String getTitleForList() {
+        if (mTaskObservable.get() == null) {
+            return "No data";
+        }
+        return mTaskObservable.get().getTaskTitle();
     }
 
     @Bindable
@@ -87,6 +125,11 @@ public class TaskViewModel extends BaseObservable {
                     public void call(List<Task> tasks) {
                         items.clear();
                         items.addAll(tasks);
+
+                        for (Task task : items) {
+                            mTaskObservable.set(task);
+                        }
+
                         setHeaderText("All tasks");
                         setProgress(View.INVISIBLE);
                         Log.d("Viewmodel: ", items.get(0).getTaskTitle());

@@ -28,12 +28,14 @@
 
 
             <CheckBox
+                android:checked="@={viewmodel.completed}"
                 android:id="@+id/complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>
 
             <TextView
+                android:text="@{viewmodel.titleForList}"
                 android:id="@+id/task_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

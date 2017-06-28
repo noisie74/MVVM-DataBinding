@@ -46,6 +46,10 @@ public class Task {
         return isCompleted;
     }
 
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
+    }
+
     public void setIsCompleted(Boolean isCompleted) {
         this.isCompleted = isCompleted;
     }

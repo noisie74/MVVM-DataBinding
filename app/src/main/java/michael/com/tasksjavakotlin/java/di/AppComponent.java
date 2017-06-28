@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import michael.com.tasksjavakotlin.MainActivity;
 import michael.com.tasksjavakotlin.java.data.DataManager;
+import michael.com.tasksjavakotlin.java.ui.TaskAdapter;
 import michael.com.tasksjavakotlin.java.ui.TaskFragment;
 import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
 
@@ -23,5 +24,7 @@ public interface AppComponent {
     void inject(TaskFragment fragment);
 
     void inject(MainActivity mainActivity);
+
+    void inject(TaskAdapter adapter);
 
 }

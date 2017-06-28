@@ -10,8 +10,12 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import michael.com.tasksjavakotlin.R;
+import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.databinding.TaskItemBinding;
+import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
 
 /**
@@ -23,6 +27,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     private List<Task> mTasks;
     private Context context;
     private OnItemClickListener mListener;
+    @Inject DataManager dataManager;
+    @Inject Context mContext;
 
     public interface OnItemClickListener {
         void onItemClick(Task task);
@@ -31,6 +37,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     public TaskAdapter(List<Task> tasks, OnItemClickListener listener) {
         mListener = listener;
         setList(tasks);
+
+        TasksApplication.getApplication().getAppComponent().inject(this);
     }
 
     public void replaceData(List<Task> tasks) {
@@ -55,7 +63,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     public void onBindViewHolder(BindingHolder holder, final int position) {
         TaskItemBinding taskItemBinding = holder.getBinding();
         final Task mTask = mTasks.get(position);
-        bindTask(taskItemBinding, mTask);
+        TaskViewModel viewModel = new TaskViewModel(mContext,dataManager);
+        taskItemBinding.setViewmodel(viewModel);
+        bindTask(viewModel, taskItemBinding, mTask);
         setTaskClickListener(taskItemBinding, mTask);
         taskItemBinding.executePendingBindings();
     }
@@ -70,15 +80,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         });
     }
 
-    private void bindTask(TaskItemBinding taskItemBinding, Task task) {
+    private void bindTask(TaskViewModel viewModel, TaskItemBinding taskItemBinding, Task task) {
+
         String title = task.getTaskTitle();
         boolean taskCompleted = task.isCompleted();
-        taskItemBinding.taskTitle.setText(title);
 
+        viewModel.taskTitle.set(title);
+
+//        taskItemBinding.taskTitle.setText(title);
+//
         if (taskCompleted) {
-            taskItemBinding.complete.setChecked(true);
+            viewModel.completedCheckBox.set(true);
+//            taskItemBinding.complete.setChecked(true);
         } else {
-            taskItemBinding.complete.setChecked(false);
+//            taskItemBinding.complete.setChecked(false);
+            viewModel.completedCheckBox.set(false);
+
         }
     }
 
