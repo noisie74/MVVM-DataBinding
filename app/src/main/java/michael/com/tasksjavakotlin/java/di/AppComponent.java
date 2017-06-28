@@ -16,7 +16,7 @@ import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
  */
 
 @Singleton
-@Component(modules = {DataModule.class, ApplicationModule.class, NetworkModule.class})
+@Component(modules = {ApplicationModule.class, NetworkModule.class})
 public interface AppComponent {
 
     TaskApi provideApi();

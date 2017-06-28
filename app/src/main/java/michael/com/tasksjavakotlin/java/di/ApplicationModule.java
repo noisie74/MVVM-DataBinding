@@ -1,9 +1,13 @@
 package michael.com.tasksjavakotlin.java.di;
 
+import android.app.Application;
 import android.content.Context;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import michael.com.tasksjavakotlin.java.data.DataManager;
 
 /**
  * Created by mborisovskiy on 6/26/17.
@@ -12,23 +16,20 @@ import dagger.Provides;
 @Module
 public class ApplicationModule {
 
-    private final Context mContext;
-//    private final TasksApplication mApplication;
+    private final Application application;
 
-//    public ApplicationModule(Context context) {
-//        mContext = context;
-//    }
-
-    public ApplicationModule(Context context) {
-        mContext = context;
+    public ApplicationModule(Application application) {
+        this.application = application;
     }
-
-//    public ApplicationModule(TasksApplication application) {
-//        mApplication = application;
-//    }
 
     @Provides
     Context provideContext() {
-        return mContext.getApplicationContext();
+        return application;
+    }
+
+    @Provides
+    @Singleton
+    DataManager provideDataManager(Context context) {
+        return new DataManager(context);
     }
 }

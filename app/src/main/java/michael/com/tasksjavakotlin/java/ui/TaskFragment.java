@@ -1,5 +1,6 @@
 package michael.com.tasksjavakotlin.java.ui;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.os.Bundle;
@@ -18,7 +19,10 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import michael.com.tasksjavakotlin.R;
+import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.databinding.FragmentMainBinding;
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
@@ -34,6 +38,8 @@ public class TaskFragment extends Fragment {
     private TaskAdapter mAdapter;
     private FragmentMainBinding binding;
     private TaskViewModel mViewModel;
+    @Inject Context context;
+    @Inject DataManager dataManager;
 
     public TaskFragment() {
     }
@@ -50,6 +56,7 @@ public class TaskFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        TasksApplication.getApplication().getAppComponent().inject(this);
     }
 
     @Nullable
@@ -91,10 +98,9 @@ public class TaskFragment extends Fragment {
     private void setupAdapter() {
 
         RecyclerView recyclerView = binding.recyclerView;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext().getApplicationContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        mAdapter = new TaskAdapter(new ArrayList<Task>(0),
-                DataManager.provideData(getContext().getApplicationContext()), mViewModel, new TaskAdapter.OnItemClickListener() {
+        mAdapter = new TaskAdapter(new ArrayList<Task>(0), dataManager, mViewModel, new TaskAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Task task) {
                 mViewModel.taskClicked(task);

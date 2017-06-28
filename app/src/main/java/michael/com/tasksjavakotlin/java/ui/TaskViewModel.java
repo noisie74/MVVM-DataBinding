@@ -14,6 +14,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import michael.com.tasksjavakotlin.BR;
+import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
@@ -47,15 +48,12 @@ public class TaskViewModel extends BaseObservable {
     public final ObservableField<String> snackBar = new ObservableField<>();
 
     public TaskViewModel(Context context, DataManager manager) {
-//        getAppComponent().getAppComponent().inject(this);
         mContext = context.getApplicationContext();
         dataManager = manager;
         mSubscription = new CompositeSubscription();
-    }
 
-//    private TasksApplication getAppComponent() {
-//        return ((TasksApplication) getAppComponent());
-//    }
+        TasksApplication.getApplication().getAppComponent().inject(this);
+    }
 
     @Bindable
     public int getProgress() {

@@ -1,5 +1,6 @@
 package michael.com.tasksjavakotlin;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     TaskViewModel viewModel;
     TaskFragment taskFragment;
     @Inject DataManager dataManager;
+    @Inject Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +31,15 @@ public class MainActivity extends AppCompatActivity {
             taskFragment = createFragment();
         }
 
-//        getAppComponent();
+        TasksApplication.getApplication().getAppComponent().inject(this);
 
-        ((TasksApplication) getApplication()).getAppComponent().inject(this);
-
-
-        viewModel = new TaskViewModel(getApplicationContext(),dataManager);
+        viewModel = new TaskViewModel(context, dataManager);
 
         if (viewModel != null) {
             taskFragment.setViewModel(viewModel);
         }
 
     }
-
-
-
-//    private AppComponent getAppComponent() {
-//        return TasksApplication.getApplication().getAppComponent();
-//    }
 
     private TaskFragment createFragment() {
         TaskFragment taskFragment = (TaskFragment) getSupportFragmentManager().findFragmentById(R.id.container);
