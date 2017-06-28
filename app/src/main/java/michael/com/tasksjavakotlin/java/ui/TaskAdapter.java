@@ -22,7 +22,7 @@ import michael.com.tasksjavakotlin.java.model.Task;
  * Created by Mikhail on 6/19/17.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>  {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder> {
 
     private List<Task> mTasks;
     private Context context;
@@ -66,10 +66,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
         setUpViewModel(taskItemBinding, mTask);
         setTaskClickListener(taskItemBinding, mTask);
+        onLongClickTaskDelete(taskItemBinding, position);
         taskItemBinding.executePendingBindings();
 
     }
-
 
     private void setUpViewModel(TaskItemBinding taskItemBinding, Task task) {
         TaskViewModel viewModel = new TaskViewModel(mContext, dataManager);
@@ -88,6 +88,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
     }
 
+    private void onLongClickTaskDelete(TaskItemBinding taskItemBinding, final int taskPosition) {
+
+        taskItemBinding.taskItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                delete(taskPosition);
+                return false;
+            }
+        });
+    }
+
     public void delete(int position) {
         mTasks.remove(position);
         notifyDataSetChanged();
@@ -98,10 +109,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         return mTasks.size();
     }
 
-    public class BindingHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public class BindingHolder extends RecyclerView.ViewHolder {
 
         TaskItemBinding binding;
-
 
         public BindingHolder(TaskItemBinding binding) {
             super(binding.getRoot());
@@ -114,12 +124,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
             return binding;
         }
 
-        @Override
-        public boolean onLongClick(View v) {
-            delete(getAdapterPosition());
-//            binding.taskItem.setocl
-            return false;
-        }
     }
 
 }
