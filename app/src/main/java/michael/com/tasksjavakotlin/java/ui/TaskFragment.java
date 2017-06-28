@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 
@@ -34,12 +35,12 @@ import michael.com.tasksjavakotlin.java.util.SnackbarUtils;
 
 public class TaskFragment extends Fragment {
 
+    @Inject Context context;
+    @Inject DataManager dataManager;
     private Observable.OnPropertyChangedCallback mSnackbarCallBack;
     private TaskAdapter mAdapter;
     private FragmentMainBinding binding;
     private TaskViewModel mViewModel;
-    @Inject Context context;
-    @Inject DataManager dataManager;
 
     public TaskFragment() {
     }
@@ -118,8 +119,7 @@ public class TaskFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("Fragment", "Fab clicked!");
                 mViewModel.saveTask(binding.editText.getText().toString());
-//                mViewModel.title.set("");
-                binding.editText.getText().clear();
+                hideKeyboard(v);
             }
         });
     }
@@ -152,6 +152,11 @@ public class TaskFragment extends Fragment {
                 break;
         }
         return true;
+    }
+
+    private void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
 }

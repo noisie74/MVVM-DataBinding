@@ -34,14 +34,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TaskViewModel extends BaseObservable {
 
-    private CompositeSubscription mSubscription;
-//    private DataManager mDataManager;
-    private Context mContext;
     @Inject DataManager dataManager;
     @Inject TaskApi taskApi;
-
-
     private int progress;
+    private CompositeSubscription mSubscription;
+    private Context mContext;
     private final ObservableField<Task> mTaskObservable = new ObservableField<>();
     public final ObservableList<Task> items = new ObservableArrayList<>();
     public final ObservableField<String> header = new ObservableField<>();
@@ -187,6 +184,7 @@ public class TaskViewModel extends BaseObservable {
             snackBar.set(task.getTaskTitle() + " done!");
         }
     }
+
 
     public String getSnackbarText() {
         return snackBar.get();

@@ -15,10 +15,10 @@ import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    TaskViewModel viewModel;
-    TaskFragment taskFragment;
     @Inject DataManager dataManager;
     @Inject Context context;
+    private TaskViewModel viewModel;
+    private TaskFragment taskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
