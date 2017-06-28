@@ -16,8 +16,6 @@ import rx.Observable;
 import rx.Single;
 import rx.functions.Func1;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Created by Mikhail on 6/18/17.
  */
@@ -31,11 +29,6 @@ public class DataManager {
         mContext = context;
 
         TasksApplication.getApplication().getAppComponent().inject(this);
-    }
-
-    public static DataManager provideData(Context context) {
-        checkNotNull(context);
-        return new DataManager(context);
     }
 
     public Observable<List<Task>> getTasks() {

@@ -18,7 +18,7 @@ import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
-import michael.com.tasksjavakotlin.java.network.TaskService;
+import michael.com.tasksjavakotlin.java.network.TaskApi;
 import retrofit2.Response;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -38,6 +38,7 @@ public class TaskViewModel extends BaseObservable {
 //    private DataManager mDataManager;
     private Context mContext;
     @Inject DataManager dataManager;
+    @Inject TaskApi taskApi;
 
 
     private int progress;
@@ -159,7 +160,7 @@ public class TaskViewModel extends BaseObservable {
     }
 
     private void updateTask(Task task) {
-        mSubscription.add(TaskService.networkCall().updateTask(task.getId(), task)
+        mSubscription.add(taskApi.updateTask(task.getId(), task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleSubscriber<Response<ResponseObject>>() {

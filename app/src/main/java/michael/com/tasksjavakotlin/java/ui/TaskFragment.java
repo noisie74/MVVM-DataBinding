@@ -100,7 +100,7 @@ public class TaskFragment extends Fragment {
         RecyclerView recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        mAdapter = new TaskAdapter(new ArrayList<Task>(0), dataManager, mViewModel, new TaskAdapter.OnItemClickListener() {
+        mAdapter = new TaskAdapter(new ArrayList<Task>(0), new TaskAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Task task) {
                 mViewModel.taskClicked(task);

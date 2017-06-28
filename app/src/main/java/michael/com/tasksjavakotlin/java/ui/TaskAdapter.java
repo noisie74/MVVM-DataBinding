@@ -12,7 +12,6 @@ import java.util.List;
 
 import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.databinding.TaskItemBinding;
-import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
 
 /**
@@ -22,9 +21,6 @@ import michael.com.tasksjavakotlin.java.model.Task;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder> {
 
     private List<Task> mTasks;
-    private TaskViewModel mTasksViewModel;
-    private TaskItemViewModel viewModel;
-    private DataManager mDataManager;
     private Context context;
     private OnItemClickListener mListener;
 
@@ -32,12 +28,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         void onItemClick(Task task);
     }
 
-    public TaskAdapter(List<Task> tasks,
-                       DataManager dataManager,
-                       TaskViewModel taskViewModel,
-                       OnItemClickListener listener) {
-        mDataManager = dataManager;
-        mTasksViewModel = taskViewModel;
+    public TaskAdapter(List<Task> tasks, OnItemClickListener listener) {
         mListener = listener;
         setList(tasks);
     }
