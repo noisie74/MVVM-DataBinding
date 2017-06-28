@@ -9,6 +9,10 @@
             name="bind"
             type="michael.com.tasksjavakotlin.java.ui.TaskAdapter.BindingHolder"/>
 
+        <variable
+            name="viewmodel"
+            type="michael.com.tasksjavakotlin.java.ui.TaskItemViewModel"/>
+
     </data>
 
 

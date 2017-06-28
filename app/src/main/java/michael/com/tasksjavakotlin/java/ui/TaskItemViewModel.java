@@ -1,7 +1,6 @@
 package michael.com.tasksjavakotlin.java.ui;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 
@@ -13,7 +12,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by mborisovskiy on 6/20/17.
  */
 
-public class TaskItemViewModel extends BaseObservable {
+public class TaskItemViewModel extends TaskViewModel {
 
     private CompositeSubscription mSubscription;
     private Context mContext;
@@ -23,8 +22,7 @@ public class TaskItemViewModel extends BaseObservable {
     public final ObservableField<Boolean> completedCheckBox = new ObservableField<>();
 
     public TaskItemViewModel(Context context, DataManager dataManager) {
-        mContext = context.getApplicationContext();
-        mdataManager = dataManager;
+        super(context,dataManager);
         mSubscription = new CompositeSubscription();
 
         mTaskObservable.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
