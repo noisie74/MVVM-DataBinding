@@ -19,10 +19,6 @@ import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
 @Component(modules = {ApplicationModule.class, NetworkModule.class})
 public interface AppComponent {
 
-    TaskApi provideApi();
-
-    DataManager getDataManager();
-
     Context getContext();
 
     void inject(DataManager dataManager);
