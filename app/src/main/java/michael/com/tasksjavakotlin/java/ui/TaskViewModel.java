@@ -144,6 +144,7 @@ public class TaskViewModel extends BaseObservable {
                     public void onSuccess(Task newTask) {
                         items.add(newTask);
                         snackBar.set(newTask.getTaskTitle() + " saved");
+                        title.set("");
                     }
 
                     @Override
