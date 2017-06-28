@@ -63,12 +63,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     public void onBindViewHolder(BindingHolder holder, final int position) {
         TaskItemBinding taskItemBinding = holder.getBinding();
         final Task mTask = mTasks.get(position);
-        TaskViewModel viewModel = new TaskViewModel(mContext,dataManager);
-        taskItemBinding.setViewmodel(viewModel);
-        viewModel.setTask(mTask);
-        bindTask(viewModel, taskItemBinding, mTask);
+
+        setUpViewModel(taskItemBinding, mTask);
         setTaskClickListener(taskItemBinding, mTask);
         taskItemBinding.executePendingBindings();
+    }
+
+    private void setUpViewModel(TaskItemBinding taskItemBinding, Task task) {
+        TaskViewModel viewModel = new TaskViewModel(mContext, dataManager);
+        taskItemBinding.setViewmodel(viewModel);
+        viewModel.setTask(task);
     }
 
     private void setTaskClickListener(TaskItemBinding taskItemBinding, final Task task) {
@@ -79,25 +83,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
                 Log.d("Adapter", task.getTaskTitle() + " Clicked");
             }
         });
-    }
-
-    private void bindTask(TaskViewModel viewModel, TaskItemBinding taskItemBinding, Task task) {
-
-        String title = task.getTaskTitle();
-        boolean taskCompleted = task.isCompleted();
-
-//        viewModel.taskTitle.set(title);
-
-//        taskItemBinding.taskTitle.setText(title);
-//
-//        if (taskCompleted) {
-//            viewModel.completedCheckBox.set(true);
-////            taskItemBinding.complete.setChecked(true);
-//        } else {
-////            taskItemBinding.complete.setChecked(false);
-//            viewModel.completedCheckBox.set(false);
-//
-//        }
     }
 
     @Override

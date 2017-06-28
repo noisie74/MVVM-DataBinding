@@ -80,8 +80,6 @@ public class TaskViewModel extends BaseObservable {
 
     public void setCompleted(boolean completed) {
         Task task = mTaskObservable.get();
-
-        // Update the entity
         task.setCompleted(completed);
     }
 
@@ -127,11 +125,6 @@ public class TaskViewModel extends BaseObservable {
                     public void call(List<Task> tasks) {
                         items.clear();
                         items.addAll(tasks);
-
-//                        for (Task task : items) {
-//                            mTaskObservable.set(task);
-//                        }
-
                         setHeaderText("All tasks");
                         setProgress(View.INVISIBLE);
                         Log.d("Viewmodel: ", items.get(0).getTaskTitle());
@@ -198,7 +191,7 @@ public class TaskViewModel extends BaseObservable {
 
 
     public void taskClicked(Task task) {
-//        changeTaskStatus(task);
+        changeTaskStatus(task);
         updateTask(task);
     }
 
@@ -220,16 +213,13 @@ public class TaskViewModel extends BaseObservable {
         );
     }
 
-//    private void changeTaskStatus(Task task) {
-//        checkNotNull(task);
-//        if (task.isCompleted()) {
-//            task.setIsCompleted(false);
-//            snackBar.set(task.getTaskTitle() + " todo!");
-//        } else {
-//            task.setIsCompleted(true);
-//            snackBar.set(task.getTaskTitle() + " done!");
-//        }
-//    }
+    private void changeTaskStatus(Task task) {
+        if (task.isCompleted()) {
+            snackBar.set(task.getTaskTitle() + " - todo!");
+        } else {
+            snackBar.set(task.getTaskTitle() + " - done!");
+        }
+    }
 
 
     public String getSnackbarText() {
