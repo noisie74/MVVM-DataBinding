@@ -117,8 +117,8 @@ public class TaskFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Fragment", "Fab clicked!");
-                mViewModel.saveTask(binding.editText.getText().toString());
+                String newTask = binding.editText.getText().toString();
+                mViewModel.saveTask(newTask);
                 hideKeyboard(v);
             }
         });

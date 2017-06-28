@@ -35,16 +35,16 @@ public class TaskViewModel extends BaseObservable {
 
     @Inject DataManager dataManager;
     @Inject TaskApi taskApi;
-    private int progress;
     private CompositeSubscription mSubscription;
     private Context mContext;
-    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
+    private int progress;
     public final ObservableList<Task> items = new ObservableArrayList<>();
     public final ObservableField<String> header = new ObservableField<>();
     public final ObservableField<String> title = new ObservableField<>();
     public final ObservableField<String> snackBar = new ObservableField<>();
     public final ObservableField<String> taskTitle = new ObservableField<>();
     public final ObservableField<Boolean> completedCheckBox = new ObservableField<>();
+    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
 
     public TaskViewModel(Context context, DataManager manager) {
         mContext = context.getApplicationContext();
