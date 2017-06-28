@@ -71,6 +71,10 @@ public class TaskViewModel extends BaseObservable {
         });
     }
 
+    public void setTask(Task task) {
+        mTaskObservable.set(task);
+    }
+
     @Bindable
     public boolean getCompleted() {
         return mTaskObservable.get().isCompleted();
@@ -126,9 +130,9 @@ public class TaskViewModel extends BaseObservable {
                         items.clear();
                         items.addAll(tasks);
 
-                        for (Task task : items) {
-                            mTaskObservable.set(task);
-                        }
+//                        for (Task task : items) {
+//                            mTaskObservable.set(task);
+//                        }
 
                         setHeaderText("All tasks");
                         setProgress(View.INVISIBLE);

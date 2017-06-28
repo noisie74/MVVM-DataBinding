@@ -11,7 +11,7 @@
 
         <variable
             name="viewmodel"
-            type="michael.com.tasksjavakotlin.java.ui.TaskItemViewModel"/>
+            type="michael.com.tasksjavakotlin.java.ui.TaskViewModel"/>
 
     </data>
 

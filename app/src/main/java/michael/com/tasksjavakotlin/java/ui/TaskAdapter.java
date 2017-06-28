@@ -65,6 +65,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         final Task mTask = mTasks.get(position);
         TaskViewModel viewModel = new TaskViewModel(mContext,dataManager);
         taskItemBinding.setViewmodel(viewModel);
+        viewModel.setTask(mTask);
         bindTask(viewModel, taskItemBinding, mTask);
         setTaskClickListener(taskItemBinding, mTask);
         taskItemBinding.executePendingBindings();
