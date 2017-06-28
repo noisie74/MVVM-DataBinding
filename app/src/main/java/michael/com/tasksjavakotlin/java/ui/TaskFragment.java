@@ -34,12 +34,12 @@ import michael.com.tasksjavakotlin.java.util.SnackbarUtils;
 
 public class TaskFragment extends Fragment {
 
+    @Inject Context context;
+    @Inject DataManager dataManager;
     private Observable.OnPropertyChangedCallback mSnackbarCallBack;
     private TaskAdapter mAdapter;
     private FragmentMainBinding binding;
     private TaskViewModel mViewModel;
-    @Inject Context context;
-    @Inject DataManager dataManager;
 
     public TaskFragment() {
     }
@@ -118,7 +118,6 @@ public class TaskFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("Fragment", "Fab clicked!");
                 mViewModel.saveTask(binding.editText.getText().toString());
-                mViewModel.title.set("");
             }
         });
     }
