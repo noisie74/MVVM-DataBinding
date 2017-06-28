@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
 
         <variable
-            name="bind"
+            name="binder"
             type="michael.com.tasksjavakotlin.java.ui.TaskAdapter.BindingHolder"/>
 
         <variable
@@ -24,7 +24,10 @@
         android:paddingBottom="@dimen/list_item_padding"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/list_item_padding">
+        android:paddingTop="@dimen/list_item_padding"
+        android:longClickable="true"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
 
             <CheckBox

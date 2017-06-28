@@ -22,7 +22,7 @@ import michael.com.tasksjavakotlin.java.model.Task;
  * Created by Mikhail on 6/19/17.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>  {
 
     private List<Task> mTasks;
     private Context context;
@@ -67,7 +67,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         setUpViewModel(taskItemBinding, mTask);
         setTaskClickListener(taskItemBinding, mTask);
         taskItemBinding.executePendingBindings();
+
     }
+
 
     private void setUpViewModel(TaskItemBinding taskItemBinding, Task task) {
         TaskViewModel viewModel = new TaskViewModel(mContext, dataManager);
@@ -83,6 +85,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
                 Log.d("Adapter", task.getTaskTitle() + " Clicked");
             }
         });
+
+    }
+
+    public void delete(int position) {
+        mTasks.remove(position);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -90,13 +98,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         return mTasks.size();
     }
 
-    public static class BindingHolder extends RecyclerView.ViewHolder {
+    public class BindingHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         TaskItemBinding binding;
+
 
         public BindingHolder(TaskItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
 
         }
 
@@ -104,6 +114,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
             return binding;
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            delete(getAdapterPosition());
+//            binding.taskItem.setocl
+            return false;
+        }
     }
 
 }
