@@ -14,6 +14,7 @@ import michael.com.tasksjavakotlin.java.network.TaskApi;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Single;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -86,6 +87,26 @@ public class DataManager {
                         return task;
                     }
                 });
+    }
+
+    public Single<Task> deleteTask(final Task task) {
+        String id = task.getId();
+
+        taskApi.deleteTask(id, task)
+                .doOnSuccess(new Action1<Response<ResponseObject>>() {
+                    @Override
+                    public void call(Response<ResponseObject> responseObjectResponse) {
+
+                    }
+                });
+//                .map(new Func1<Response<ResponseObject>, Task>() {
+//
+//                    @Override
+//                    public Task call(Response<ResponseObject> responseObject) {
+//
+//                        return responseObject.body().getTasksResponse().
+//                    }
+//                });
     }
 
 }

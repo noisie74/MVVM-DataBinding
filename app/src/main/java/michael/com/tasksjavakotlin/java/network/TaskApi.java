@@ -5,6 +5,7 @@ import michael.com.tasksjavakotlin.java.model.ResponseObject;
 import michael.com.tasksjavakotlin.java.model.Task;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -26,5 +27,8 @@ public interface TaskApi {
 
     @PATCH("/tasks/{id}")
     Single<Response<ResponseObject>> updateTask(@Path("id") String id, @Body Task task);
+
+    @DELETE("/tasks/{id}")
+    Single<Response<ResponseObject>> deleteTask(@Path("id") String id, @Body Task task);
 
 }

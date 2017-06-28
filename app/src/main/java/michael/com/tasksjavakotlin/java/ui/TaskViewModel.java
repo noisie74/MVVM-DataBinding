@@ -221,6 +221,24 @@ public class TaskViewModel extends BaseObservable {
         }
     }
 
+    public void deleteClickedTask(Task task) {
+
+        mSubscription.add(dataManager.deleteTask(task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<Task>() {
+                    @Override
+                    public void onSuccess(Task value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                })
+        );
+    }
 
     public String getSnackbarText() {
         return snackBar.get();
