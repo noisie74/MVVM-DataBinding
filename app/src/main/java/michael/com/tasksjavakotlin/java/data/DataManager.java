@@ -70,7 +70,6 @@ public class DataManager {
                 .toList();
     }
 
-
     public Single<Task> saveTask(Task task) {
         return taskApi
                 .saveTask(task)
@@ -82,31 +81,9 @@ public class DataManager {
                         String taskTitle = newTask.body().getNewTaskTitle();
                         boolean taskStatus = newTask.body().getNewTaskStatus();
 
-                        Task task = new Task(taskId, taskTitle, taskStatus);
-
-                        return task;
+                        return new Task(taskId, taskTitle, taskStatus);
                     }
                 });
-    }
-
-    public Single<Task> deleteTask(final Task task) {
-        String id = task.getId();
-
-        taskApi.deleteTask(id, task)
-                .doOnSuccess(new Action1<Response<ResponseObject>>() {
-                    @Override
-                    public void call(Response<ResponseObject> responseObjectResponse) {
-
-                    }
-                });
-//                .map(new Func1<Response<ResponseObject>, Task>() {
-//
-//                    @Override
-//                    public Task call(Response<ResponseObject> responseObject) {
-//
-//                        return responseObject.body().getTasksResponse().
-//                    }
-//                });
     }
 
 }

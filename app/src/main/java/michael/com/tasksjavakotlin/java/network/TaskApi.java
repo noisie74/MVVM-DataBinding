@@ -29,6 +29,6 @@ public interface TaskApi {
     Single<Response<ResponseObject>> updateTask(@Path("id") String id, @Body Task task);
 
     @DELETE("/tasks/{id}")
-    Single<Response<ResponseObject>> deleteTask(@Path("id") String id, @Body Task task);
+    Single<ResponseObject> deleteTask(@Path("id") String id);
 
 }

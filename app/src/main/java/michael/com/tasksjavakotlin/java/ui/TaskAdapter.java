@@ -27,6 +27,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     private List<Task> mTasks;
     private Context context;
     private OnItemClickListener mListener;
+    private TaskViewModel viewModel;
     @Inject DataManager dataManager;
     @Inject Context mContext;
 
@@ -72,7 +73,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     }
 
     private void setUpViewModel(TaskItemBinding taskItemBinding, Task task) {
-        TaskViewModel viewModel = new TaskViewModel(mContext, dataManager);
+        viewModel = new TaskViewModel(mContext, dataManager);
         taskItemBinding.setViewmodel(viewModel);
         viewModel.setTask(task);
     }
@@ -100,7 +101,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
     }
 
     public void delete(int position) {
+        String taskId = mTasks.get(position).getId();
+        String taskTitle = mTasks.get(position).getTaskTitle();
         mTasks.remove(position);
+        viewModel.removeTask(taskId);
+        viewModel.snackBar.set(taskTitle + " deleted");
         notifyDataSetChanged();
     }
 

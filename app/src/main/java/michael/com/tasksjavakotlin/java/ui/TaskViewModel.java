@@ -221,20 +221,19 @@ public class TaskViewModel extends BaseObservable {
         }
     }
 
-    public void deleteClickedTask(Task task) {
-
-        mSubscription.add(dataManager.deleteTask(task)
+    public void removeTask(String taskID) {
+        mSubscription.add(taskApi.deleteTask(taskID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleSubscriber<Task>() {
+                .subscribe(new Action1<ResponseObject>() {
                     @Override
-                    public void onSuccess(Task value) {
-
+                    public void call(ResponseObject response) {
+//                        snackBar.set("task deleted");
                     }
-
+                }, new Action1<Throwable>() {
                     @Override
-                    public void onError(Throwable error) {
-
+                    public void call(Throwable throwable) {
+                        snackBar.set("unable to delete task");
                     }
                 })
         );
