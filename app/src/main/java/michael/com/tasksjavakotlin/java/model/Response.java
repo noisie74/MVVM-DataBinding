@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Mikhail on 6/17/17.
  */
 
-public class ResponseObject {
+public class Response {
 
     private List<Task> tasks;
     @SerializedName("_id")

@@ -17,10 +17,9 @@ import javax.inject.Inject;
 import michael.com.tasksjavakotlin.BR;
 import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.java.data.DataManager;
-import michael.com.tasksjavakotlin.java.model.ResponseObject;
+import michael.com.tasksjavakotlin.java.model.Response;
 import michael.com.tasksjavakotlin.java.model.Task;
 import michael.com.tasksjavakotlin.java.network.TaskApi;
-import retrofit2.Response;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -190,7 +189,7 @@ public class TaskViewModel extends BaseObservable {
     }
 
 
-    public void taskClicked(Task task) {
+    public void onTaskClicked(Task task) {
         changeTaskStatus(task);
         updateTask(task);
     }
@@ -199,9 +198,9 @@ public class TaskViewModel extends BaseObservable {
         mSubscription.add(taskApi.updateTask(task.getId(), task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleSubscriber<Response<ResponseObject>>() {
+                .subscribe(new SingleSubscriber<Response>() {
                     @Override
-                    public void onSuccess(Response<ResponseObject> updatedTask) {
+                    public void onSuccess(Response updatedTask) {
                         notifyChange();
                     }
 
@@ -215,9 +214,9 @@ public class TaskViewModel extends BaseObservable {
 
     private void changeTaskStatus(Task task) {
         if (task.isCompleted()) {
-            snackBar.set(task.getTaskTitle() + " - todo!");
-        } else {
             snackBar.set(task.getTaskTitle() + " - done!");
+        } else {
+            snackBar.set(task.getTaskTitle() + " - todo!");
         }
     }
 
@@ -225,9 +224,9 @@ public class TaskViewModel extends BaseObservable {
         mSubscription.add(taskApi.deleteTask(taskID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ResponseObject>() {
+                .subscribe(new Action1<Response>() {
                     @Override
-                    public void call(ResponseObject response) {
+                    public void call(Response response) {
 
                     }
                 }, new Action1<Throwable>() {

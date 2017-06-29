@@ -39,7 +39,7 @@ public class TaskFragment extends Fragment {
     @Inject DataManager dataManager;
     private Observable.OnPropertyChangedCallback mSnackbarCallBack;
     private TaskAdapter mAdapter;
-    private FragmentMainBinding binding;
+    private FragmentMainBinding mBinding;
     private TaskViewModel mViewModel;
 
     public TaskFragment() {
@@ -63,17 +63,18 @@ public class TaskFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
-        binding.setView(this);
-        binding.setViewmodel(mViewModel);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+        mBinding.setView(this);
+        mBinding.setViewmodel(mViewModel);
 
         setHasOptionsMenu(true);
 
         mViewModel.setProgress(View.VISIBLE);
         mViewModel.loadTasks(true);
+
         setupAdapter();
 
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -98,13 +99,13 @@ public class TaskFragment extends Fragment {
 
     private void setupAdapter() {
 
-        RecyclerView recyclerView = binding.recyclerView;
+        RecyclerView recyclerView = mBinding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         mAdapter = new TaskAdapter(new ArrayList<Task>(0), new TaskAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Task task) {
-                mViewModel.taskClicked(task);
+                mViewModel.onTaskClicked(task);
                 Log.d("Fragment", task.getTaskTitle() + " Clicked");
 
             }
@@ -117,7 +118,7 @@ public class TaskFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newTask = binding.editText.getText().toString();
+                String newTask = mBinding.editText.getText().toString();
                 mViewModel.saveTask(newTask);
                 hideKeyboard(v);
             }
@@ -155,7 +156,8 @@ public class TaskFragment extends Fragment {
     }
 
     private void hideKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 

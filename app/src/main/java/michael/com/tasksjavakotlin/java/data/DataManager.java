@@ -8,13 +8,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import michael.com.tasksjavakotlin.TasksApplication;
-import michael.com.tasksjavakotlin.java.model.ResponseObject;
+import michael.com.tasksjavakotlin.java.model.Response;
 import michael.com.tasksjavakotlin.java.model.Task;
 import michael.com.tasksjavakotlin.java.network.TaskApi;
-import retrofit2.Response;
 import rx.Observable;
 import rx.Single;
-import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -37,10 +35,10 @@ public class DataManager {
         final List<Task> tasks = new ArrayList<>();
 
         return taskApi.getTasks()
-                .map(new Func1<Response<ResponseObject>, List<Task>>() {
+                .map(new Func1<Response, List<Task>>() {
                     @Override
-                    public List<Task> call(Response<ResponseObject> responseObjectResponse) {
-                        List<Task> response = responseObjectResponse.body().getTasksResponse();
+                    public List<Task> call(Response responseObject) {
+                        List<Task> response = responseObject.getTasksResponse();
                         tasks.addAll(response);
                         return tasks;
                     }
@@ -52,13 +50,12 @@ public class DataManager {
                 });
     }
 
-
     public Observable<List<Task>> getCompletedTasks() {
         return taskApi.getTasks()
-                .flatMap(new Func1<Response<ResponseObject>, Observable<Task>>() {
+                .flatMap(new Func1<Response, Observable<Task>>() {
                     @Override
-                    public Observable<Task> call(Response<ResponseObject> responseObject) {
-                        return Observable.from(responseObject.body().getTasksResponse());
+                    public Observable<Task> call(Response responseObject) {
+                        return Observable.from(responseObject.getTasksResponse());
                     }
                 })
                 .filter(new Func1<Task, Boolean>() {
@@ -73,13 +70,13 @@ public class DataManager {
     public Single<Task> saveTask(Task task) {
         return taskApi
                 .saveTask(task)
-                .map(new Func1<Response<ResponseObject>, Task>() {
+                .map(new Func1<Response, Task>() {
                     @Override
-                    public Task call(Response<ResponseObject> newTask) {
+                    public Task call(Response newTask) {
 
-                        String taskId = newTask.body().getNewTaskId();
-                        String taskTitle = newTask.body().getNewTaskTitle();
-                        boolean taskStatus = newTask.body().getNewTaskStatus();
+                        String taskId = newTask.getNewTaskId();
+                        String taskTitle = newTask.getNewTaskTitle();
+                        boolean taskStatus = newTask.getNewTaskStatus();
 
                         return new Task(taskId, taskTitle, taskStatus);
                     }

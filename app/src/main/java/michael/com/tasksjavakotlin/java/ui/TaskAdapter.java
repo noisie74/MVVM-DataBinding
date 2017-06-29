@@ -2,8 +2,6 @@ package michael.com.tasksjavakotlin.java.ui;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,7 +123,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
         public BindingHolder(TaskItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
 
         }
 
