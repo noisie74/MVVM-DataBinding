@@ -228,7 +228,7 @@ public class TaskViewModel extends BaseObservable {
                 .subscribe(new Action1<ResponseObject>() {
                     @Override
                     public void call(ResponseObject response) {
-//                        snackBar.set("task deleted");
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -237,6 +237,7 @@ public class TaskViewModel extends BaseObservable {
                     }
                 })
         );
+
     }
 
     public String getSnackbarText() {

@@ -2,6 +2,8 @@ package michael.com.tasksjavakotlin.java.ui;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.databinding.TaskItemBinding;
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.model.Task;
+import michael.com.tasksjavakotlin.java.util.SnackbarUtils;
 
 /**
  * Created by Mikhail on 6/19/17.
@@ -91,21 +94,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.BindingHolder>
 
     private void onLongClickTaskDelete(TaskItemBinding taskItemBinding, final int taskPosition) {
 
+        final String taskTitle = mTasks.get(taskPosition).getTaskTitle();
+
         taskItemBinding.taskItem.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 delete(taskPosition);
+                SnackbarUtils.showSnackBar(v, taskTitle + " deleted");
                 return false;
             }
         });
     }
 
-    public void delete(int position) {
+    private void delete(int position) {
         String taskId = mTasks.get(position).getId();
-        String taskTitle = mTasks.get(position).getTaskTitle();
         mTasks.remove(position);
         viewModel.removeTask(taskId);
-        viewModel.snackBar.set(taskTitle + " deleted");
         notifyDataSetChanged();
     }
 
