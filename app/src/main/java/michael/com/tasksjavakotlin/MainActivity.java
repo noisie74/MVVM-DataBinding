@@ -9,9 +9,9 @@ import android.support.v7.widget.Toolbar;
 
 import javax.inject.Inject;
 
-import michael.com.tasksjavakotlin.java.data.DataManager;
-import michael.com.tasksjavakotlin.java.ui.TaskFragment;
-import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
+import michael.com.tasksjavakotlin.features.data.DataManager;
+import michael.com.tasksjavakotlin.features.ui.TaskFragment;
+import michael.com.tasksjavakotlin.features.ui.TaskViewModel;
 
 public class MainActivity extends AppCompatActivity {
 

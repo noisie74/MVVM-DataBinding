@@ -1,11 +1,11 @@
-package michael.com.tasksjavakotlin.java.ui;
+package michael.com.tasksjavakotlin.features.ui;
 
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
-import michael.com.tasksjavakotlin.java.model.Task;
+import michael.com.tasksjavakotlin.features.model.Task;
 
 /**
  * Created by mborisovskiy on 6/20/17.

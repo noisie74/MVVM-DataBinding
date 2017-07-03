@@ -1,10 +1,10 @@
-package michael.com.tasksjavakotlin.java.di;
+package michael.com.tasksjavakotlin.features.di;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import michael.com.tasksjavakotlin.java.network.TaskApi;
+import michael.com.tasksjavakotlin.features.network.TaskApi;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;

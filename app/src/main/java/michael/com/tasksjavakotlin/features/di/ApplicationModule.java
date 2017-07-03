@@ -1,4 +1,4 @@
-package michael.com.tasksjavakotlin.java.di;
+package michael.com.tasksjavakotlin.features.di;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import michael.com.tasksjavakotlin.java.data.DataManager;
+import michael.com.tasksjavakotlin.features.data.DataManager;
 
 /**
  * Created by mborisovskiy on 6/26/17.

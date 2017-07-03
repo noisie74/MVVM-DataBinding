@@ -7,11 +7,11 @@
 
         <variable
             name="binder"
-            type="michael.com.tasksjavakotlin.java.ui.TaskAdapter.BindingHolder"/>
+            type="michael.com.tasksjavakotlin.features.ui.TaskAdapter.BindingHolder"/>
 
         <variable
             name="viewmodel"
-            type="michael.com.tasksjavakotlin.java.ui.TaskViewModel"/>
+            type="michael.com.tasksjavakotlin.features.ui.TaskViewModel"/>
 
     </data>
 

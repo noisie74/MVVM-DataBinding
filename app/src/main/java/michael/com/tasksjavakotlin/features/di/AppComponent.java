@@ -1,13 +1,13 @@
-package michael.com.tasksjavakotlin.java.di;
+package michael.com.tasksjavakotlin.features.di;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 import michael.com.tasksjavakotlin.MainActivity;
-import michael.com.tasksjavakotlin.java.data.DataManager;
-import michael.com.tasksjavakotlin.java.ui.TaskAdapter;
-import michael.com.tasksjavakotlin.java.ui.TaskFragment;
-import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
+import michael.com.tasksjavakotlin.features.data.DataManager;
+import michael.com.tasksjavakotlin.features.ui.TaskAdapter;
+import michael.com.tasksjavakotlin.features.ui.TaskFragment;
+import michael.com.tasksjavakotlin.features.ui.TaskViewModel;
 
 /**
  * Created by mborisovskiy on 6/26/17.

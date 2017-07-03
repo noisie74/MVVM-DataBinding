@@ -1,8 +1,8 @@
-package michael.com.tasksjavakotlin.java.network;
+package michael.com.tasksjavakotlin.features.network;
 
 
-import michael.com.tasksjavakotlin.java.model.Response;
-import michael.com.tasksjavakotlin.java.model.Task;
+import michael.com.tasksjavakotlin.features.model.Response;
+import michael.com.tasksjavakotlin.features.model.Task;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;

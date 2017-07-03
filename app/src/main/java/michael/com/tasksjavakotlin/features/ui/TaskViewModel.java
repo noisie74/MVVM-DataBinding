@@ -1,4 +1,4 @@
-package michael.com.tasksjavakotlin.java.ui;
+package michael.com.tasksjavakotlin.features.ui;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
@@ -16,10 +16,10 @@ import javax.inject.Inject;
 
 import michael.com.tasksjavakotlin.BR;
 import michael.com.tasksjavakotlin.TasksApplication;
-import michael.com.tasksjavakotlin.java.data.DataManager;
-import michael.com.tasksjavakotlin.java.model.Response;
-import michael.com.tasksjavakotlin.java.model.Task;
-import michael.com.tasksjavakotlin.java.network.TaskApi;
+import michael.com.tasksjavakotlin.features.data.DataManager;
+import michael.com.tasksjavakotlin.features.model.Response;
+import michael.com.tasksjavakotlin.features.model.Task;
+import michael.com.tasksjavakotlin.features.network.TaskApi;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;

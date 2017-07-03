@@ -1,4 +1,4 @@
-package michael.com.tasksjavakotlin.java.data;
+package michael.com.tasksjavakotlin.features.data;
 
 import android.content.Context;
 
@@ -8,9 +8,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import michael.com.tasksjavakotlin.TasksApplication;
-import michael.com.tasksjavakotlin.java.model.Response;
-import michael.com.tasksjavakotlin.java.model.Task;
-import michael.com.tasksjavakotlin.java.network.TaskApi;
+import michael.com.tasksjavakotlin.features.model.Response;
+import michael.com.tasksjavakotlin.features.model.Task;
+import michael.com.tasksjavakotlin.features.network.TaskApi;
 import rx.Observable;
 import rx.Single;
 import rx.functions.Func1;

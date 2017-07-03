@@ -2,11 +2,11 @@ package michael.com.tasksjavakotlin;
 
 import android.app.Application;
 
-import michael.com.tasksjavakotlin.java.di.AppComponent;
-import michael.com.tasksjavakotlin.java.di.ApplicationModule;
-import michael.com.tasksjavakotlin.java.di.DaggerAppComponent;
-import michael.com.tasksjavakotlin.java.di.NetworkModule;
-import michael.com.tasksjavakotlin.java.util.Constants;
+import michael.com.tasksjavakotlin.features.di.AppComponent;
+import michael.com.tasksjavakotlin.features.di.ApplicationModule;
+import michael.com.tasksjavakotlin.features.di.DaggerAppComponent;
+import michael.com.tasksjavakotlin.features.di.NetworkModule;
+import michael.com.tasksjavakotlin.features.util.Constants;
 
 /**
  * Created by mborisovskiy on 6/26/17.

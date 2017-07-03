@@ -7,11 +7,11 @@
 
         <variable
             name="view"
-            type="michael.com.tasksjavakotlin.java.ui.TaskFragment"/>
+            type="michael.com.tasksjavakotlin.features.ui.TaskFragment"/>
 
         <variable
             name="viewmodel"
-            type="michael.com.tasksjavakotlin.java.ui.TaskViewModel"/>
+            type="michael.com.tasksjavakotlin.features.ui.TaskViewModel"/>
     </data>
 
 <RelativeLayout

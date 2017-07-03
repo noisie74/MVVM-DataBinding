@@ -1,4 +1,4 @@
-package michael.com.tasksjavakotlin.java.model;
+package michael.com.tasksjavakotlin.features.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

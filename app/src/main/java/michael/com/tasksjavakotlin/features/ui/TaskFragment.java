@@ -1,4 +1,4 @@
-package michael.com.tasksjavakotlin.java.ui;
+package michael.com.tasksjavakotlin.features.ui;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -25,9 +25,9 @@ import javax.inject.Inject;
 import michael.com.tasksjavakotlin.R;
 import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.databinding.FragmentMainBinding;
-import michael.com.tasksjavakotlin.java.data.DataManager;
-import michael.com.tasksjavakotlin.java.model.Task;
-import michael.com.tasksjavakotlin.java.util.SnackbarUtils;
+import michael.com.tasksjavakotlin.features.data.DataManager;
+import michael.com.tasksjavakotlin.features.model.Task;
+import michael.com.tasksjavakotlin.features.util.SnackbarUtils;
 
 /**
  * Created by Mikhail on 6/17/17.

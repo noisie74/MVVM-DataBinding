@@ -1,4 +1,4 @@
-package michael.com.tasksjavakotlin.java.util;
+package michael.com.tasksjavakotlin.features.util;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
