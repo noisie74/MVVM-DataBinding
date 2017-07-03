@@ -1,10 +1,10 @@
 package michael.com.tasksjavakotlin.java.network;
 
 
-import michael.com.tasksjavakotlin.java.model.ResponseObject;
+import michael.com.tasksjavakotlin.java.model.Response;
 import michael.com.tasksjavakotlin.java.model.Task;
-import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -19,12 +19,15 @@ import rx.Single;
 public interface TaskApi {
 
     @GET("/tasks")
-    Observable<Response<ResponseObject>> getTasks();
+    Observable<Response> getTasks();
 
     @POST("/tasks")
-    Single<Response<ResponseObject>> saveTask(@Body Task task);
+    Single<Response> saveTask(@Body Task task);
 
     @PATCH("/tasks/{id}")
-    Single<Response<ResponseObject>> updateTask(@Path("id") String id, @Body Task task);
+    Single<Response> updateTask(@Path("id") String id, @Body Task task);
+
+    @DELETE("/tasks/{id}")
+    Single<Response> deleteTask(@Path("id") String id);
 
 }

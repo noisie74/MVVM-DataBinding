@@ -1,9 +1,13 @@
 package michael.com.tasksjavakotlin;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+
+import javax.inject.Inject;
 
 import michael.com.tasksjavakotlin.java.data.DataManager;
 import michael.com.tasksjavakotlin.java.ui.TaskFragment;
@@ -11,19 +15,29 @@ import michael.com.tasksjavakotlin.java.ui.TaskViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    TaskViewModel viewModel;
-    TaskFragment taskFragment;
+    @Inject DataManager dataManager;
+    @Inject Context context;
+    private TaskViewModel viewModel;
+    private TaskFragment taskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupToolbar();
+
         if (savedInstanceState == null) {
             taskFragment = createFragment();
         }
-        viewModel = new TaskViewModel(getApplicationContext(), DataManager.provideData(getApplicationContext()));
-        taskFragment.setViewModel(viewModel);
+
+        TasksApplication.getApplication().getAppComponent().inject(this);
+
+        viewModel = new TaskViewModel(context, dataManager);
+
+        if (viewModel != null) {
+            taskFragment.setViewModel(viewModel);
+        }
 
     }
 
@@ -41,4 +55,10 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.container, fragment);
         transaction.commit();
     }
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
 }

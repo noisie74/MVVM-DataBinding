@@ -46,8 +46,8 @@ public class Task {
         return isCompleted;
     }
 
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
+    public void setCompleted(boolean completed) {
+        this.isCompleted = completed;
     }
 
     public boolean isEmpty() {

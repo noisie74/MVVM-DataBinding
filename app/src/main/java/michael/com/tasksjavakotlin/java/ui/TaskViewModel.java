@@ -1,26 +1,28 @@
 package michael.com.tasksjavakotlin.java.ui;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import michael.com.tasksjavakotlin.BR;
+import michael.com.tasksjavakotlin.TasksApplication;
 import michael.com.tasksjavakotlin.java.data.DataManager;
+import michael.com.tasksjavakotlin.java.model.Response;
 import michael.com.tasksjavakotlin.java.model.Task;
-import rx.Subscriber;
+import michael.com.tasksjavakotlin.java.network.TaskApi;
+import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -30,20 +32,62 @@ import rx.subscriptions.CompositeSubscription;
 
 public class TaskViewModel extends BaseObservable {
 
-    private LiveData<List<Task>> mtasks;
+    @Inject DataManager dataManager;
+    @Inject TaskApi taskApi;
     private CompositeSubscription mSubscription;
-    private DataManager mDataManager;
     private Context mContext;
-
     private int progress;
     public final ObservableList<Task> items = new ObservableArrayList<>();
     public final ObservableField<String> header = new ObservableField<>();
+    public final ObservableField<String> title = new ObservableField<>();
+    public final ObservableField<String> snackBar = new ObservableField<>();
+    public final ObservableField<String> taskTitle = new ObservableField<>();
+    public final ObservableField<Boolean> completedCheckBox = new ObservableField<>();
+    private final ObservableField<Task> mTaskObservable = new ObservableField<>();
 
-
-    public TaskViewModel(Context context, DataManager dataManager) {
+    public TaskViewModel(Context context, DataManager manager) {
         mContext = context.getApplicationContext();
-        mDataManager = dataManager;
+        dataManager = manager;
         mSubscription = new CompositeSubscription();
+
+        TasksApplication.getApplication().getAppComponent().inject(this);
+
+        mTaskObservable.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                Task task = mTaskObservable.get();
+                if (task != null) {
+                    taskTitle.set(task.getTaskTitle());
+                    if (task.isCompleted()) {
+                        completedCheckBox.set(true);
+                    } else {
+                        completedCheckBox.set(false);
+                    }
+                }
+            }
+        });
+    }
+
+    public void setTask(Task task) {
+        mTaskObservable.set(task);
+    }
+
+    @Bindable
+    public boolean getCompleted() {
+        return mTaskObservable.get().isCompleted();
+    }
+
+    public void setCompleted(boolean completed) {
+        Task task = mTaskObservable.get();
+        task.setCompleted(completed);
+    }
+
+    @Bindable
+    public String getTitleForList() {
+        if (mTaskObservable.get() == null) {
+            return "No data";
+        }
+        return mTaskObservable.get().getTaskTitle();
     }
 
     @Bindable
@@ -60,33 +104,146 @@ public class TaskViewModel extends BaseObservable {
         loadTasks(false);
     }
 
+    public void stop() {
+        mSubscription.clear();
+    }
+
     public void loadTasks(boolean isLoading) {
 
         if (isLoading) {
-
-            mSubscription.add(mDataManager.getTasks()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<List<Task>>() {
-                        @Override
-                        public void onCompleted() {
-                            setProgress(View.INVISIBLE);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d("ViewModel", e.toString());
-                        }
-
-                        @Override
-                        public void onNext(List<Task> tasks) {
-                            items.addAll(tasks);
-                            Log.d("ViewModel", tasks.get(0).getTaskTitle());
-                        }
-                    })
-            );
+            getTaskList();
         }
+    }
+
+    private void getTaskList() {
+        mSubscription.add(dataManager.getTasks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Task>>() {
+                    @Override
+                    public void call(List<Task> tasks) {
+                        items.clear();
+                        items.addAll(tasks);
+                        setHeaderText("All tasks");
+                        setProgress(View.INVISIBLE);
+                        Log.d("Viewmodel: ", items.get(0).getTaskTitle());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        snackBar.set("Unable to load Tasks");
+                    }
+                })
+        );
+    }
+
+    public void loadCompletedTasks() {
+        mSubscription.add(dataManager.getCompletedTasks()
+                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Task>>() {
+                    @Override
+                    public void call(List<Task> tasks) {
+                        items.clear();
+                        items.addAll(tasks);
+                        setHeaderText("Completed tasks");
+                        setProgress(View.INVISIBLE);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        snackBar.set("Unable to load Tasks");
+                    }
+                })
+        );
+    }
+
+    public void saveTask(String taskTitle) {
+
+        Task task = new Task(taskTitle);
+
+        if (!task.isEmpty()) {
+            createTask(task);
+        } else {
+            snackBar.set("Task cannot be empty!");
+        }
+    }
+
+    private void createTask(Task task) {
+        mSubscription.add(dataManager.saveTask(task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<Task>() {
+                    @Override
+                    public void onSuccess(Task newTask) {
+                        items.add(newTask);
+                        snackBar.set(newTask.getTaskTitle() + " saved");
+                        title.set("");
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        snackBar.set("Unable to save new Task");
+                    }
+                }));
+    }
+
+
+    public void onTaskClicked(Task task) {
+        changeTaskStatus(task);
+        updateTask(task);
+    }
+
+    private void updateTask(Task task) {
+        mSubscription.add(taskApi.updateTask(task.getId(), task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<Response>() {
+                    @Override
+                    public void onSuccess(Response updatedTask) {
+                        notifyChange();
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        snackBar.set("Unable to update task");
+                    }
+                })
+        );
+    }
+
+    private void changeTaskStatus(Task task) {
+        if (task.isCompleted()) {
+            snackBar.set(task.getTaskTitle() + " - done!");
+        } else {
+            snackBar.set(task.getTaskTitle() + " - todo!");
+        }
+    }
+
+    public void removeTask(String taskID) {
+        mSubscription.add(taskApi.deleteTask(taskID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Response>() {
+                    @Override
+                    public void call(Response response) {
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        snackBar.set("unable to delete task");
+                    }
+                })
+        );
 
     }
 
+    public String getSnackbarText() {
+        return snackBar.get();
+    }
+
+    private void setHeaderText(String text) {
+        header.set(text);
+    }
 }
